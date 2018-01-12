@@ -14,7 +14,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RemoteRoboticHead" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="BTViewController" customModule="RemoteRoboticHead" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,17 +28,17 @@
                                             <constraint firstAttribute="height" constant="50" id="1r1-TI-RRj"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="select bluetooth from list" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rb0-7t-P7M">
-                                        <rect key="frame" x="0.0" y="50" width="320" height="35"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="选择蓝牙设备" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rb0-7t-P7M">
+                                        <rect key="frame" x="0.0" y="50" width="320" height="50"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="QZp-rh-jme"/>
+                                            <constraint firstAttribute="height" constant="50" id="QZp-rh-jme"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="btTableView" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ixg-9Z-Ioc">
-                                        <rect key="frame" x="0.0" y="85" width="320" height="361"/>
+                                        <rect key="frame" x="0.0" y="100" width="320" height="346"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BlueTCells" id="vaD-c4-5Zp">
@@ -51,8 +51,8 @@
                                             </tableViewCell>
                                         </prototypes>
                                         <connections>
-                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="B22-mi-Yco"/>
-                                            <outlet property="delegate" destination="BYZ-38-t0r" id="u8a-6g-5ar"/>
+                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="yxh-zQ-qrP"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="kcy-A4-hOW"/>
                                         </connections>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="system start" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWv-mT-RCx">
@@ -68,23 +68,39 @@
                                         <rect key="frame" x="0.0" y="471" width="320" height="57"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y45-XH-iDU">
-                                                <rect key="frame" x="0.0" y="0.0" width="160" height="57"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="106.5" height="57"/>
                                                 <color key="backgroundColor" red="0.20533215830000001" green="0.69542905330000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="LINK">
+                                                <state key="normal" title="连接蓝牙">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="clicklin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A45-sq-hqs"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLt-zv-Tbv">
-                                                <rect key="frame" x="160" y="0.0" width="160" height="57"/>
+                                                <rect key="frame" x="106.5" y="0.0" width="106.5" height="57"/>
                                                 <color key="backgroundColor" red="0.20533215830000001" green="0.69542905330000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="SKIP">
+                                                <state key="normal" title="动态捕捉">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="clickFaceCapBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zhk-Ue-K3S"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="an3-TV-iOd">
+                                                <rect key="frame" x="213" y="0.0" width="107" height="57"/>
+                                                <color key="backgroundColor" red="0.20533215830000001" green="0.69542905330000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="手动控制">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="clickControlBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s85-E5-eK8"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Y45-XH-iDU" firstAttribute="width" secondItem="2cv-qW-eJT" secondAttribute="width" multiplier="0.5" id="LwU-TZ-9hH"/>
-                                            <constraint firstItem="iLt-zv-Tbv" firstAttribute="width" secondItem="2cv-qW-eJT" secondAttribute="width" multiplier="0.5" id="uz5-pg-dE6"/>
+                                            <constraint firstItem="Y45-XH-iDU" firstAttribute="width" secondItem="2cv-qW-eJT" secondAttribute="width" multiplier="0.3333" id="LwU-TZ-9hH"/>
+                                            <constraint firstItem="iLt-zv-Tbv" firstAttribute="width" secondItem="2cv-qW-eJT" secondAttribute="width" multiplier="0.3333" id="uz5-pg-dE6"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -109,8 +125,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="btTableView" destination="Ixg-9Z-Ioc" id="uuw-v8-UYl"/>
-                        <outlet property="textBTstatus" destination="tWv-mT-RCx" id="kYl-b1-F6z"/>
+                        <outlet property="blTableView" destination="Ixg-9Z-Ioc" id="lEG-4a-QrL"/>
+                        <outlet property="goControlBtn" destination="an3-TV-iOd" id="vrW-Pl-4ZV"/>
+                        <outlet property="goFaceCapBtn" destination="iLt-zv-Tbv" id="u3l-gk-UwC"/>
+                        <outlet property="linbtn" destination="Y45-XH-iDU" id="fiv-Pj-IPt"/>
+                        <outlet property="showText" destination="tWv-mT-RCx" id="YCZ-GG-fpK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
