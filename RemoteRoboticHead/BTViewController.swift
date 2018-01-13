@@ -271,8 +271,8 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     
-    //转场
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //转场 ?待测试全局函数，目前不需要
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier=="showfacecappage"){
             let fcontroller = segue.destination as! FaceCapViewController
             fcontroller.peripheral = self.peripheral
@@ -283,7 +283,7 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             scontroller.peripheral = self.peripheral
             scontroller.writeCharacteristic = self.writeCharacteristic
         }
-    }
+    }*/
     
     
     
