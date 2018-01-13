@@ -230,8 +230,8 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.linbtn.setTitle("正在尝试连接", for:.normal)
         //开始尝试连接蓝牙
         if(self.deviceList.count>0){
-            self.peripheral = self.deviceList.object(at: self.selectCell) as! CBPeripheral
             self.showText.text = "开始尝试链接:\(self.peripheral.name ?? "none")"
+            self.peripheral = self.deviceList.object(at: self.selectCell) as! CBPeripheral
             self.manager.connect(self.peripheral, options: nil)
         }else{
             //重置按钮
@@ -239,14 +239,16 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             self.linbtn.isEnabled=false
             self.linbtn.backgroundColor=UIColor.lightGray
             self.linbtn.setTitle("再次选择", for: .normal)
+            //测试用
+            btnActive()
         }
     }
     
+    //无意思的按钮点击
     @IBAction func clickFaceCapBtn(_ sender: UIButton) {
         //self.performSegue(withIdentifier: "showfacecappage", sender: self)
         self.showText.text = "跳转动作捕捉页面"
     }
-    
     @IBAction func clickControlBtn(_ sender: UIButton) {
         //self.performSegue(withIdentifier: "showcontrolpage", sender: self)
         self.showText.text = "跳转电机控制页面"
@@ -259,20 +261,23 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.goControlBtn.isEnabled = true;
         self.goFaceCapBtn.backgroundColor=UIColor(red: 55/255, green: 177/255, blue: 1, alpha: 1)
         self.goControlBtn.backgroundColor=UIColor(red: 55/255, green: 177/255, blue: 1, alpha: 1)
-        
     }
     
     
     
     //转场
-    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier=="showmovepage"){
-            let controller = segue.destination as! MoveViewController
-            controller.peripheral = self.peripheral
-            controller.writeCharacteristic = self.writeCharacteristic
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier=="showfacecappage"){
+            let fcontroller = segue.destination as! FaceCapViewController
+            fcontroller.peripheral = self.peripheral
+            fcontroller.writeCharacteristic = self.writeCharacteristic
         }
-        print("change to new page")
-    }*/
+        if(segue.identifier=="showcontrolpage"){
+            let scontroller = segue.destination as! ControlViewController
+            scontroller.peripheral = self.peripheral
+            scontroller.writeCharacteristic = self.writeCharacteristic
+        }
+    }
     
     
     
