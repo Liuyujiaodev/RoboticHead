@@ -145,6 +145,8 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.peripheral.delegate = self
         self.peripheral.discoverServices(nil)
         self.showText.text = "已经链接： \(self.peripheral.name ?? "none")"
+        //全局变量？待测试
+        dataperipheral = self.peripheral
     }
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         self.showText.text = "链接端口错误：\(error.debugDescription)"
@@ -183,10 +185,14 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 self.peripheral.setNotifyValue(true, for: cht)
                 self.showText.text = "发送UUID FFE1"
                 self.writeCharacteristic = cht
+                //全局变量？待测试
+                datawriteCharacteristic = cht
             }
             if(cht.uuid.uuidString == "FFE3"){
                 self.showText.text = "发送UUID FFE3"
                 self.writeCharacteristic = cht
+                //全局变量？待测试
+                datawriteCharacteristic = cht
             }
             //下面2个基本没用，测试后可以删除？
             if(cht.uuid.uuidString == "2A37"){

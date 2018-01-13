@@ -12,8 +12,9 @@ import CoreBluetooth
 
 class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDataSource{
     
-    var peripheral: CBPeripheral!
-    var writeCharacteristic: CBCharacteristic!
+    //蓝牙，待测试全局变量
+    //var peripheral: CBPeripheral!
+    //var writeCharacteristic: CBCharacteristic!
     //显示临时状态的文字
     @IBOutlet weak var showText: UILabel!
     //电动机列表

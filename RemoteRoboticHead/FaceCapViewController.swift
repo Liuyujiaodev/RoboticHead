@@ -11,9 +11,9 @@ import CoreBluetooth
 
 class FaceCapViewController: UIViewController {
     
-    //用于蓝牙输出的
-    var peripheral: CBPeripheral?
-    var writeCharacteristic: CBCharacteristic?
+    //用于蓝牙输出的 待测试全局变量
+    //var peripheral: CBPeripheral?
+    //var writeCharacteristic: CBCharacteristic?
     //显示当前状态的文字框
     @IBOutlet weak var showText: UILabel!
     //用于拖拽的一个标记点，计算坐标，并一起输出到数组中 //可以拖拽 //这个标记点位于显示最上层
