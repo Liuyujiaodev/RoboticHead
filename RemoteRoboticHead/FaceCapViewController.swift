@@ -40,32 +40,7 @@ class FaceCapViewController: UIViewController {
     }
     
     
-    // pan手势事件
-    
-    /*
-     @IBAction func dragepin(_ sender: UIPanGestureRecognizer) {
-     
-     let point = sender.translation(in: view)
-     sender.view?.center = CGPoint(x: sender.view!.center.x + point.x, y: sender.view!.center.y + point.y)
-     sender.setTranslation(.zero, in: view)
-     print(sender.view?.center ?? "none")
-     
-     }*/
-    
-    /*@objc func dragMoving(pan: UIPanGestureRecognizer){
-     
-     let point = pan.translation(in: view)
-     
-     if pan.state == .began {
-     
-     pan.view?.alpha = 0.8
-     
-     }
-     
-     pan.view?.center = CGPoint(x: pan.view!.center.x + point.x, y: pan.view!.center.y + point.y)
-     
-     pan.setTranslation(.zero, in: view)
-     */
+   
     
     /*if pan.state == .ended {
      
@@ -79,53 +54,7 @@ class FaceCapViewController: UIViewController {
      
      let right = KW-v.frame.maxX
      
-     // 计算出 view 距离屏幕边缘距离的最小值
-     
-     let temp = [top,left,bottom,right].sorted().first
-     
-     // 平移动画
-     
-     UIView.animate(withDuration: 0.3, delay: 0.3, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-     
-     if temp == top{
-     
-     v.transform = v.transform.translatedBy(x: 0, y: -top)
-     
-     }else if temp == left{
-     
-     v.transform = v.transform.translatedBy(x: -left, y: 0)
-     
-     }else if temp == bottom{
-     
-     v.transform = v.transform.translatedBy(x: 0, y: bottom)
-     
-     }else{
-     
-     v.transform = v.transform.translatedBy(x: right, y: 0)
-     
-     }
-     
-     }, completion: { (finish) in
-     
-     
-     
-     })
-     
-     }
-     
-     }
-     
-     }*/
-    
-    
-    
-    // 点手势 事件处理
-    
-    /*@objc func tap(tap: UITapGestureRecognizer){
-     
-     print("tap")
-     
-     }*/
+     */
     
     
     /*
