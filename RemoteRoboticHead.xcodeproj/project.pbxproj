@@ -10,6 +10,8 @@
 		5F3BD80E200912E100110755 /* FaceCapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80D200912E100110755 /* FaceCapViewController.swift */; };
 		5F3BD810200913E000110755 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80F200913E000110755 /* ControlViewController.swift */; };
 		5F3BD81920099EF500110755 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD81820099EF500110755 /* test.m */; };
+		5F3BD83E2009DACB00110755 /* CSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD83D2009DACB00110755 /* CSTableViewCell.swift */; };
+		5F3BD8402009DBF600110755 /* ServosData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD83F2009DBF600110755 /* ServosData.swift */; };
 		5F4CF3562007834500ED2066 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4CF3552007834500ED2066 /* AppDelegate.swift */; };
 		5F4CF3582007834500ED2066 /* BTViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4CF3572007834500ED2066 /* BTViewController.swift */; };
 		5F4CF35B2007834500ED2066 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4CF3592007834500ED2066 /* Main.storyboard */; };
@@ -23,6 +25,8 @@
 		5F3BD812200921D700110755 /* RemoteRoboticHead-Brdging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemoteRoboticHead-Brdging-Header.h"; sourceTree = "<group>"; };
 		5F3BD81820099EF500110755 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 		5F3BD81A20099EFD00110755 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		5F3BD83D2009DACB00110755 /* CSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTableViewCell.swift; sourceTree = "<group>"; };
+		5F3BD83F2009DBF600110755 /* ServosData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServosData.swift; sourceTree = "<group>"; };
 		5F4CF3522007834500ED2066 /* RemoteRoboticHead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteRoboticHead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F4CF3552007834500ED2066 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F4CF3572007834500ED2066 /* BTViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +77,8 @@
 				5F3BD80F200913E000110755 /* ControlViewController.swift */,
 				5F3BD81A20099EFD00110755 /* test.h */,
 				5F3BD81820099EF500110755 /* test.m */,
+				5F3BD83D2009DACB00110755 /* CSTableViewCell.swift */,
+				5F3BD83F2009DBF600110755 /* ServosData.swift */,
 			);
 			path = RemoteRoboticHead;
 			sourceTree = "<group>";
@@ -150,6 +156,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F3BD81920099EF500110755 /* test.m in Sources */,
+				5F3BD83E2009DACB00110755 /* CSTableViewCell.swift in Sources */,
+				5F3BD8402009DBF600110755 /* ServosData.swift in Sources */,
 				5F4CF3582007834500ED2066 /* BTViewController.swift in Sources */,
 				5F4CF3562007834500ED2066 /* AppDelegate.swift in Sources */,
 				5F3BD810200913E000110755 /* ControlViewController.swift in Sources */,

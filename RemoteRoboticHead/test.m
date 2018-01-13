@@ -6,7 +6,7 @@
 //  Copyright © 2018年 EXdoll. All rights reserved.
 //
 
-//测试如何在swift里用oc的临时文件
+//只是测试如何在swift里用oc的临时文件
 #import "test.h"
 
 @interface testoc ()

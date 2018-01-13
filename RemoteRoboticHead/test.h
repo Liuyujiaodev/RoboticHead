@@ -7,7 +7,7 @@
 //
 
 
-//测试如何在swift里用oc的临时文件
+//只是测试如何在swift里用oc的临时文件
 #import <Foundation/Foundation.h>
 #ifndef test_h
 #define test_h
