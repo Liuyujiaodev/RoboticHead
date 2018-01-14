@@ -20,7 +20,7 @@ public func writeToPeripheral(bytes:[UInt8]) {
     if datawriteCharacteristic != nil {
         let data:NSData = dataWithHexstring(bytes: bytes)
         dataperipheral!.writeValue(data as Data, for: datawriteCharacteristic!, type: .withoutResponse)
-        print("输出 \(bytes)")
+        //print("输出 \(bytes)")
     } else{
         print("无法发送数据")
     }
@@ -34,7 +34,7 @@ func dataWithHexstring(bytes:[UInt8]) -> NSData {
 //电动机数据
 struct Servos {
     var name:String
-    var currentAngle:Int
+    var currentAngle:UInt8
     var minA:Int
     var maxA:Int
 }
@@ -51,7 +51,7 @@ public func VIEW_HEIGHT(view:UIView)->CGFloat{
 }
 
 //蓝牙传输数据21
-var blueData = [90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]
+var blueData:[UInt8] = [90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]
 //滑动块用列表数据
 var servosData = [
     Servos(name: "左侧眉毛", currentAngle: 90, minA: 20, maxA: 160),
@@ -76,4 +76,11 @@ var servosData = [
     Servos(name: "右肩前后", currentAngle: 90, minA: 40, maxA: 140),
     Servos(name: "呼吸频率", currentAngle: 90, minA: 10, maxA: 170)
 ]
+//蓝牙传输数据更新 需要修改，让其本身就是UInt8
+public func bluedataupdate(){
+    for i in 0...20 {
+        blueData[i] =  servosData[i].currentAngle
+    }
+}
+
 

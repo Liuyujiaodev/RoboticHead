@@ -50,7 +50,7 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
         cell.angleSlider.value = Float(sp.currentAngle)
         //每个滑动块给一个编号，方便查找
         cell.angleSlider.tag = indexPath.row
-        //滑动块添加事件 事件为onChangeOfSlider
+        //滑动块添加事件 事件为onChangeOfSlider ? 这个地方是否会重复添加？
         cell.angleSlider.addTarget(self, action:#selector(ControlViewController.onChangeOfSlider(slider:)), for: UIControlEvents.valueChanged)
         return cell
     }
@@ -60,10 +60,25 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
         let nu = Int(slider.value)
         let cell = slider.superview?.superview?.superview as! CSTableViewCell
         cell.angleText.text = String(nu)
-        servosData[index].currentAngle = nu
+        servosData[index].currentAngle = UInt8(nu)
+        changedata()
     }
     
+    //测试输出蓝牙信号
+    func changedata() -> () {
+        bluedataupdate()
+        //print(blueData)
+        writeToPeripheral(bytes: blueData)
+    }
     
+    //蓝牙 是否发送成功
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        if(error != nil){
+            print("发送数据失败")
+        }else{
+            print("发送数据成功")
+        }
+    }
     
     
     

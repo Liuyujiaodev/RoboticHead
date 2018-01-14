@@ -162,13 +162,13 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             return
         }
         for service in peripheral.services!{
-            self.showText.text = "UUID:\(service.uuid)"
+            self.showText.text = "查找服务特征UUID:\(service.uuid)"
             //测试新的
-            //peripheral.discoverCharacteristics(nil, for: service)
+            peripheral.discoverCharacteristics(nil, for: service)
             //测试只搜索serviceuuid ffe0的
-            if (service.uuid == CBUUID(string: "FFE0")) {
+            /*if (service.uuid == CBUUID(string: "FFE0")) {
                 peripheral.discoverCharacteristics(nil, for: service as CBService)
-            }
+            }*/
         }
     }
     
@@ -183,15 +183,15 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             if(cht.uuid.uuidString == "FFE1"){
                 //如果以通知的形式读取数据，则直接发到didUpdateValueForCharacteristic方法处理数据。
                 self.peripheral.setNotifyValue(true, for: cht)
-                self.showText.text = "发送UUID FFE1"
+                self.showText.text = "当前特征UUID FFE1"
                 self.writeCharacteristic = cht
-                //全局变量？待测试
+                //全局变量?
                 datawriteCharacteristic = cht
             }
             if(cht.uuid.uuidString == "FFE3"){
-                self.showText.text = "发送UUID FFE3"
+                self.showText.text = "当前特征UUID FFE3"
                 self.writeCharacteristic = cht
-                //全局变量？待测试
+                //全局变量?
                 datawriteCharacteristic = cht
             }
             //下面2个基本没用，测试后可以删除？
@@ -213,15 +213,23 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             return
         }
         if(characteristic.uuid.description == "FFE1" || characteristic.uuid.uuidString == "FFE1" || characteristic.uuid.description == "2AF1" || characteristic.uuid.uuidString == "2AF1"){
-            self.showText.text = "特征发来的:\(String(describing: characteristic.descriptors))"
-            //跳转页面 蓝牙已经连接可以输出
-            //self.performSegue(withIdentifier: "showmovepage", sender: self)
+            self.showText.text = "完成特征发来的:\(String(describing: characteristic.uuid.uuidString))"
             //蓝牙成功，启动按钮
-            self.btnActive()
+            //测试时候关闭
+            //self.btnActive()
         }else{
             self.showText.text = "蓝牙特征发来不明"
         }
     }
+    
+    /*/蓝牙 是否发送成功
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        if(error != nil){
+            print("发送数据失败")
+        }else{
+            print("发送数据成功")
+        }
+    }*/
     
     
     // MARK: - changeStage
@@ -236,8 +244,8 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.linbtn.setTitle("正在尝试连接", for:.normal)
         //开始尝试连接蓝牙
         if(self.deviceList.count>0){
-            self.showText.text = "开始尝试链接:\(self.peripheral.name ?? "none")"
             self.peripheral = self.deviceList.object(at: self.selectCell) as! CBPeripheral
+            self.showText.text = "开始尝试链接:\(self.peripheral.name ?? "none")"
             self.manager.connect(self.peripheral, options: nil)
         }else{
             //重置按钮
