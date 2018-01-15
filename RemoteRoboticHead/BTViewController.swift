@@ -69,7 +69,6 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         if(blnumber>0){
             let device:CBPeripheral=self.deviceList.object(at: indexPath.row) as! CBPeripheral
             //蓝牙列表CELL主标题就写个蓝牙名称
-            cell.textLabel?.text = "NONE"
             if(indexPath.row != self.selectCell){
                 cell.accessoryType = .none
             }

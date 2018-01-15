@@ -86,5 +86,52 @@ public func bluedataupdate(){
         blueData[i] =  servosData[i].currentAngle
     }
 }
+//ActionListView页面使用的数据列表
+var actionDatas:[OneFaceAction] = []
+//单独表情动作名称列表和角度
+var actionNameList:[String] = []
+var actionAngleList:[[UInt8]] = []
+//数据保存路径-单独表情列表名称
+let actionNameListFilePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0] + "/actionNameList.dat"
+//数据保存路径-单独表情列表角度
+let actionAngleListFilePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0] + "/actionAngleList.dat"
+//保存单独表情列表名称和角度
+public func saveActionList(){
+    //规划储存的列表
+    actionNameList = []
+    actionAngleList = []
+    if(actionDatas.count>0){
+    for i in 0..<actionDatas.count{
+        actionNameList.append(actionDatas[i].name)
+        actionAngleList.append(actionDatas[i].actionData)
+        }
+    }else{
+        actionAngleList = [[90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]]
+        actionNameList = ["预设"]
+    }
+    //保存到路径
+    NSKeyedArchiver.archiveRootObject(actionNameList, toFile: actionNameListFilePath)
+    NSKeyedArchiver.archiveRootObject(actionAngleList, toFile: actionAngleListFilePath)
+}
+//读取单独表情列表名称和角度
+public func readActionList(){
+    //检查是否有储存的表情和角度文件
+    let fileManager = FileManager.default
+    if(!fileManager.fileExists(atPath: actionNameListFilePath)){
+        //这里可以预存一些基础表情
+        actionAngleList = [[90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]]
+        actionNameList = ["预设"]
+        saveActionList()
+    }
+    //从路径读取
+    actionNameList = NSKeyedUnarchiver.unarchiveObject(withFile: actionNameListFilePath) as! Array
+    actionAngleList = NSKeyedUnarchiver.unarchiveObject(withFile: actionAngleListFilePath) as! Array
+    //从新规划ActionListView页面列表数据
+    actionDatas = []
+    for i in 0..<actionNameList.count{
+        actionDatas.append(OneFaceAction(name: actionNameList[i], actionData: actionAngleList[i]))
+    }
+}
+
 
 

@@ -12,37 +12,30 @@ class ActionListViewController: UIViewController,UITableViewDelegate, UITableVie
     
     @IBOutlet weak var showText: UILabel!
     
+    
+    //列表当前选中的index
+    var selectAction = 0;
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //读取储存的数据列表到全局参数 actionDatas[OneFaceAction]
+        readActionList()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    // MARK: - data save and load
-    
-    //等待写保存和读取
-    var actionDatas = [
-        OneFaceAction(name:"预设",actionData:[90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]),
-        OneFaceAction(name:"笑容",actionData:[90,90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]),
-        OneFaceAction(name:"闭眼",actionData:[90,90,90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]),
-        OneFaceAction(name:"生气",actionData:[90,90,90,90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]),
-        OneFaceAction(name:"微笑",actionData:[90,90,90,90,90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]),
-        OneFaceAction(name:"眨眼",actionData:[90,90,90,90,90,90,120,90,90,90,90,90,90,90,90,90,90,90,90,90,90])
-    ]
-    var selectAction = 0;
     
     
     // MARK: - tableViews
     
     //表格列表数量，读取数据 //还没写
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.actionDatas.count
+        return actionDatas.count
     }
     //列表
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "ActionCellls")
-        cell.textLabel?.text = self.actionDatas[indexPath.row].name
+        cell.textLabel?.text = actionDatas[indexPath.row].name
         return cell
     }
     //列表选择一个动作
@@ -55,7 +48,7 @@ class ActionListViewController: UIViewController,UITableViewDelegate, UITableVie
         cell?.accessoryType = .checkmark
         tableView.deselectRow(at: indexPath, animated: true)
         //一旦点击开始输出数据到蓝牙
-        self.showText.text = "当前选择:\(self.actionDatas[indexPath.row].name)"
+        self.showText.text = "当前选择:\(actionDatas[indexPath.row].name)"
         self.selectAction = indexPath.row
         //待写
     }
@@ -66,21 +59,22 @@ class ActionListViewController: UIViewController,UITableViewDelegate, UITableVie
             //跳转到编辑页面  //跳转需要携带数据
             self.performSegue(withIdentifier: "showcontrolpage", sender: self)
         }
-        let delect = UITableViewRowAction(style: .normal, title: "删除") { (_, indexPath) in
+        let delect = UITableViewRowAction(style: .default, title: "删除") { (_, indexPath) in
             //删除确认对话框
             let alertbar = UIAlertController(title: "删除动作", message: "确认是否删除动作数组", preferredStyle: .actionSheet)
             //确定删除
             let okbtn = UIAlertAction(title: "确认", style: .default, handler: { (_) in
                 //从数组和列表中移除
-                self.self.actionDatas.remove(at: indexPath.row)
+                actionDatas.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                saveActionList()
             })
             let nobtn = UIAlertAction(title: "取消", style: .cancel, handler: nil)
             alertbar.addAction(okbtn)
             alertbar.addAction(nobtn)
             //完成事件，暂时没用
             self.present(alertbar, animated: true, completion: {
-                //print("completed click action")
+                //print("删除之后还有：\(actionDatas.count)")
             })
         }
         edit.backgroundColor = UIColor.magenta
@@ -90,6 +84,14 @@ class ActionListViewController: UIViewController,UITableViewDelegate, UITableVie
     
     //转场
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //一次测试 保存名称数组和二维数据数组
+        /*actionNameList = []
+        actionAngleList = []
+        for r in 0...5 {
+            actionNameList.append(actionDatas[r].name)
+            actionAngleList.append(actionDatas[r].actionData)
+        }
+        saveActionList()*/
         if(segue.identifier=="showcontrolpage"){
             //编辑动作时，携带数组数据
             for i in 0...20 {
