@@ -20,7 +20,6 @@ public func writeToPeripheral(bytes:[UInt8]) {
     if datawriteCharacteristic != nil {
         let data:NSData = dataWithHexstring(bytes: bytes)
         dataperipheral!.writeValue(data as Data, for: datawriteCharacteristic!, type: .withoutResponse)
-        //print("输出 \(bytes)")
     } else{
         print("无法发送数据")
     }
@@ -37,6 +36,11 @@ struct Servos {
     var currentAngle:UInt8
     var minA:Int
     var maxA:Int
+}
+//保存表情动作数据
+struct OneFaceAction {
+    var name:String = ""
+    var actionData:[UInt8] = [90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90]
 }
 //设备屏幕尺寸
 public let SCREEN_WIDTH=UIScreen.main.bounds.size.width

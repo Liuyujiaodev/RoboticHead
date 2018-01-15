@@ -20,14 +20,15 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
     //电动机列表
     @IBOutlet weak var servoList: UITableView!
     
+    var currentActionName = "Action name"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // 测试用，读取OC数据到swift
         let te = testoc.getintoc()
-        showText.text = "测试从OC读取数据：\(te)"
-        
+        self.showText.text = "测试从OC读取数据：\(te)"
+        self.showText.text = "当前动作：\(currentActionName)"
     }
 
     override func didReceiveMemoryWarning() {
@@ -69,6 +70,9 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
         bluedataupdate()
         //print(blueData)
         writeToPeripheral(bytes: blueData)
+        let timeInterval:TimeInterval = Date().timeIntervalSince1970
+        let timeStamp = Int(timeInterval)
+        self.showText.text = "当前时间：\(timeStamp) | 输出"
     }
     
     //蓝牙 是否发送成功

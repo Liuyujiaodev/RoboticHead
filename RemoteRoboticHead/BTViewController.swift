@@ -246,6 +246,7 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         if(self.deviceList.count>0){
             self.peripheral = self.deviceList.object(at: self.selectCell) as! CBPeripheral
             self.showText.text = "开始尝试链接:\(self.peripheral.name ?? "none")"
+            //连接蓝牙
             self.manager.connect(self.peripheral, options: nil)
         }else{
             //重置按钮
