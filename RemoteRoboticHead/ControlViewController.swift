@@ -37,18 +37,18 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
     
     //电动机控制列表数量 //ServosData.swift里设置了电动机数组
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return servosData.count
+        return servosData.count //固定值
     }
     //按电动机数组生成列表
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CSCells", for: indexPath) as! CSTableViewCell
         let sp = servosData[indexPath.row]
         //给列表数据付值
-        cell.nameText.text = sp.name
-        cell.angleText.text = String(sp.currentAngle)
-        cell.angleSlider.maximumValue = Float(sp.maxA)
-        cell.angleSlider.minimumValue = Float(sp.minA)
-        cell.angleSlider.value = Float(sp.currentAngle)
+        cell.nameText.text = sp.name                    //固定值
+        cell.angleText.text = String(sp.currentAngle)   //可变值
+        cell.angleSlider.maximumValue = Float(sp.maxA)  //固定值
+        cell.angleSlider.minimumValue = Float(sp.minA)  //固定值
+        cell.angleSlider.value = Float(sp.currentAngle) //可变值
         //每个滑动块给一个编号，方便查找
         cell.angleSlider.tag = indexPath.row
         //滑动块添加事件 事件为onChangeOfSlider ? 这个地方是否会重复添加？
@@ -62,31 +62,37 @@ class ControlViewController: UIViewController,UITableViewDelegate, UITableViewDa
         let cell = slider.superview?.superview?.superview as! CSTableViewCell
         cell.angleText.text = String(nu)
         servosData[index].currentAngle = UInt8(nu)
-        changedata()
-    }
-    
-    //测试输出蓝牙信号
-    func changedata() -> () {
-        bluedataupdate()
-        //print(blueData)
-        writeToPeripheral(bytes: blueData)
-        let timeInterval:TimeInterval = Date().timeIntervalSince1970
-        let timeStamp = Int(timeInterval)
-        self.showText.text = "当前时间：\(timeStamp) | 输出"
-    }
-    
-    //蓝牙 是否发送成功
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if(error != nil){
-            print("发送数据失败")
-        }else{
-            print("发送数据成功")
+        //改变之后发送蓝牙数据 //电动机号码+注册号 和 转动角度[angle]
+        let servonu = index + ServoOneAccount
+        if(dataperipheral != nil){
+            wirteToPeripheralOne(servonu: servonu, angle: servosData[index].currentAngle)
         }
+        self.showText.text = "转动电机\(index)角度\(servosData[index].currentAngle)"
     }
     
     
+    //保存当前编辑的数据
+    @IBAction func saveFaceData(_ sender: UIButton) {
+        if(selectAction>=actionDatas.count){
+            let newAC = OneFaceAction(name: currentActionName, actionData: saveDataUpdate())
+            actionDatas.append(newAC)
+        }else{
+            actionDatas[selectAction].name = currentActionName
+            actionDatas[selectAction].actionData = saveDataUpdate()
+        }
+        saveActionList()
+        self.showText.text = "保存动作数据:\(currentActionName)"
+    }
     
-
+    //回复初试数据
+    @IBAction func defaultFaceData(_ sender: UIButton) {
+        for i in 0..<20{
+            servosData[i].currentAngle = 90
+        }
+        servoList.reloadData()
+        self.showText.text = "动作数据恢复初始值"
+    }
+    
     /*
     // MARK: - Navigation
 

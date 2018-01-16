@@ -301,8 +301,8 @@
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7t-80-QWL">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="9" height="30"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J7t-80-QWL">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="30"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="9" id="EqF-Dg-kf0"/>
                                                                     </constraints>
@@ -311,10 +311,10 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <slider opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="90" minValue="1" maxValue="180" translatesAutoresizingMaskIntoConstraints="NO" id="QJD-uH-pm9">
-                                                                    <rect key="frame" x="7" y="0.0" width="294" height="31"/>
+                                                                    <rect key="frame" x="-2" y="0.0" width="304" height="31"/>
                                                                 </slider>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bm5-14-TXa">
-                                                                    <rect key="frame" x="299" y="0.0" width="1" height="30"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="240" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bm5-14-TXa">
+                                                                    <rect key="frame" x="300" y="0.0" width="0.0" height="30"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="9" id="QYU-84-tq1"/>
                                                                     </constraints>
@@ -371,6 +371,9 @@
                                                 <state key="normal" title="恢复预设">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="defaultFaceData:" destination="rEe-Fk-mpC" eventType="touchUpInside" id="aMH-w2-hiK"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NgS-TZ-Pgs">
                                                 <rect key="frame" x="106.5" y="0.0" width="106.5" height="36"/>
@@ -378,11 +381,14 @@
                                                 <state key="normal" title="保存表情">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="saveFaceData:" destination="rEe-Fk-mpC" eventType="touchUpInside" id="rJ6-Oy-Nuw"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xtl-nz-j3o">
                                                 <rect key="frame" x="213" y="0.0" width="107" height="36"/>
                                                 <color key="backgroundColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
-                                                <state key="normal" title="取消返回">
+                                                <state key="normal" title="返回">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
@@ -426,7 +432,85 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ExK-A2-33M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2304" y="472"/>
+            <point key="canvasLocation" x="2303" y="308"/>
+        </scene>
+        <!--Body Move View Controller-->
+        <scene sceneID="sKu-sZ-ikv">
+            <objects>
+                <viewController id="Xyh-hI-uq9" customClass="BodyMoveViewController" customModule="RemoteRoboticHead" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="i4K-ES-kj3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="If7-HC-Acs">
+                                <rect key="frame" x="0.0" y="45" width="320" height="523"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="上半身可动操作" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xn0-Vg-OxP">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="PJ7-V0-3Gy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="COj-kE-86H">
+                                        <rect key="frame" x="0.0" y="30" width="320" height="431"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="显示临时数据" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTS-eJ-0ff">
+                                        <rect key="frame" x="0.0" y="461" width="320" height="26"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="26" id="Dzk-FJ-vMu"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vga-yd-Pzf">
+                                        <rect key="frame" x="0.0" y="487" width="320" height="36"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LFI-I1-FsS">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="36"/>
+                                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="返回">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="K9g-Ou-vKA" kind="show" id="5UP-qJ-FbG"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="36" id="2H1-k0-aps"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="UTS-eJ-0ff" secondAttribute="trailing" id="5tk-BB-B7B"/>
+                                    <constraint firstItem="xn0-Vg-OxP" firstAttribute="leading" secondItem="If7-HC-Acs" secondAttribute="leading" id="QPu-nI-6K4"/>
+                                    <constraint firstItem="UTS-eJ-0ff" firstAttribute="leading" secondItem="If7-HC-Acs" secondAttribute="leading" id="Y8x-CK-8sU"/>
+                                    <constraint firstAttribute="trailing" secondItem="vga-yd-Pzf" secondAttribute="trailing" id="aJO-OA-HuY"/>
+                                    <constraint firstItem="vga-yd-Pzf" firstAttribute="leading" secondItem="If7-HC-Acs" secondAttribute="leading" id="bKa-Tu-WND"/>
+                                    <constraint firstAttribute="trailing" secondItem="xn0-Vg-OxP" secondAttribute="trailing" id="mDY-PC-RHK"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="nrh-1K-77A" firstAttribute="trailing" secondItem="If7-HC-Acs" secondAttribute="trailing" id="QGg-hk-gGh"/>
+                            <constraint firstItem="If7-HC-Acs" firstAttribute="top" secondItem="nrh-1K-77A" secondAttribute="top" constant="25" id="dNA-6B-LiI"/>
+                            <constraint firstItem="If7-HC-Acs" firstAttribute="leading" secondItem="nrh-1K-77A" secondAttribute="leading" id="fqs-rh-Wmx"/>
+                            <constraint firstItem="nrh-1K-77A" firstAttribute="bottom" secondItem="If7-HC-Acs" secondAttribute="bottom" id="iAQ-xy-T72"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="nrh-1K-77A"/>
+                    </view>
+                    <connections>
+                        <outlet property="showText" destination="UTS-eJ-0ff" id="xgY-hg-81Q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Npz-rl-40p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2413" y="1032"/>
         </scene>
         <!--Action List View Controller-->
         <scene sceneID="k1u-Rn-oZ5">
@@ -525,6 +609,9 @@
                                                         <integer key="value" value="5"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="sendingTextToBTClick:" destination="K9g-Ou-vKA" eventType="touchUpInside" id="yhf-Pt-cBl"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K43-hV-Qbe">
                                                 <rect key="frame" x="313" y="0.0" width="7" height="32"/>
@@ -559,7 +646,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="rEe-Fk-mpC" kind="show" identifier="makenewactionpage" id="C0M-Cm-ELm"/>
+                                                    <action selector="creatNewActionClick:" destination="K9g-Ou-vKA" eventType="touchUpInside" id="f1b-DX-a4x"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w2w-rr-rui">
@@ -568,6 +655,9 @@
                                                 <state key="normal" title="连续动作">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="Xyh-hI-uq9" kind="show" id="1h3-jy-f3M"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9sv-jt-TXe">
                                                 <rect key="frame" x="213" y="0.0" width="107" height="36"/>
@@ -611,13 +701,15 @@
                         <viewLayoutGuide key="safeArea" id="Sgi-5h-Dbz"/>
                     </view>
                     <connections>
+                        <outlet property="blueTinputText" destination="aEm-Lx-H2Y" id="bph-wg-WZR"/>
                         <outlet property="showText" destination="75A-Es-cN4" id="8Bs-vw-P4U"/>
                         <segue destination="rEe-Fk-mpC" kind="show" identifier="showcontrolpage" id="Nis-Dt-qz0"/>
+                        <segue destination="rEe-Fk-mpC" kind="show" identifier="makenewactionpage" id="UrZ-6y-IKS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Poo-Hv-QhK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="752" y="700"/>
+            <point key="canvasLocation" x="994" y="800"/>
         </scene>
     </scenes>
     <resources>
@@ -626,7 +718,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="pf9-DE-nxc"/>
-        <segue reference="C0M-Cm-ELm"/>
-        <segue reference="enI-8g-IIT"/>
+        <segue reference="UrZ-6y-IKS"/>
+        <segue reference="uQX-s5-CM3"/>
     </inferredMetricsTieBreakers>
 </document>

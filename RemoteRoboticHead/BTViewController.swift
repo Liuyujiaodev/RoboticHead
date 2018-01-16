@@ -253,9 +253,10 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             self.linbtn.isEnabled=false
             self.linbtn.backgroundColor=UIColor.lightGray
             self.linbtn.setTitle("再次选择", for: .normal)
-            //测试用
-            btnActive()
+            
         }
+        //测试用
+        btnActive()
     }
     
     //无意思的按钮点击
