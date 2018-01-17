@@ -44,7 +44,7 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         //停止按键功能
         self.linbtn.isEnabled=false
         self.goControlBtn.isEnabled=false
-        self.goFaceCapBtn.isEnabled=false
+        self.goFaceCapBtn.isEnabled=true
         self.goControlBtn.backgroundColor=UIColor.lightGray
         self.goFaceCapBtn.backgroundColor=UIColor.lightGray
         self.linbtn.backgroundColor=UIColor.lightGray
@@ -261,6 +261,8 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     //无意思的按钮点击
     @IBAction func clickFaceCapBtn(_ sender: UIButton) {
+        let faceVC = FaceCapController.init(nibName: nil, bundle: nil)
+        self.present(faceVC, animated: false, completion: nil)
         //self.performSegue(withIdentifier: "showfacecappage", sender: self)
         self.showText.text = "跳转动作捕捉页面"
     }

@@ -85,7 +85,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="clickFaceCapBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zhk-Ue-K3S"/>
-                                                    <segue destination="5re-MT-XNo" kind="show" identifier="showfacecappage" id="ePj-LK-ona"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="an3-TV-iOd">
@@ -201,9 +200,6 @@
                                                 <state key="normal" title="返回">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
-                                                <connections>
-                                                    <segue destination="BYZ-38-t0r" kind="show" id="enI-8g-IIT"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -719,6 +715,5 @@
     <inferredMetricsTieBreakers>
         <segue reference="pf9-DE-nxc"/>
         <segue reference="UrZ-6y-IKS"/>
-        <segue reference="uQX-s5-CM3"/>
     </inferredMetricsTieBreakers>
 </document>

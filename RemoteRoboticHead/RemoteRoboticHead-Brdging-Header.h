@@ -15,6 +15,6 @@
 #define RemoteRoboticHead_Brdging_Header_h
 
 #import "test.h"
-
+#import "FaceCapController.h"
 
 #endif /* RemoteRoboticHead_Brdging_Header_h */
