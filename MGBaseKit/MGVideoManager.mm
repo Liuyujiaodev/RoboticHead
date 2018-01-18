@@ -159,7 +159,7 @@
         
         /* 摄像头 */
         _videoDevice = [self cameraWithPosition:self.devicePosition];
-        [self setMaxVideoFrame:60 videoDevice:_videoDevice];
+        [self setMaxVideoFrame:6 videoDevice:_videoDevice];
         
         /* input */
         NSError *DeviceError;

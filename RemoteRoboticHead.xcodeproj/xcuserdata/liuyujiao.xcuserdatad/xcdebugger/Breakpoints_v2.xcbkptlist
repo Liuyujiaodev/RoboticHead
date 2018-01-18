@@ -346,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "537952023.863547"
+            timestampString = "537961151.393106"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "65"
@@ -362,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "537952023.864159"
+            timestampString = "537961151.3934391"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
+            startingLineNumber = "404"
+            endingLineNumber = "404"
             landmarkName = "-showAVAuthorizationStatusDeniedAlert"
             landmarkType = "7">
          </BreakpointContent>
@@ -474,7 +474,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
-            timestampString = "537952023.8645149"
+            timestampString = "537961151.393621"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "50"
@@ -490,7 +490,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
-            timestampString = "537952023.86457"
+            timestampString = "537961151.3940721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
@@ -516,7 +516,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
-            timestampString = "537952023.86462"
+            timestampString = "537961151.394322"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "22"
@@ -532,7 +532,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
-            timestampString = "537952023.864815"
+            timestampString = "537961151.394749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
@@ -548,11 +548,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "537952023.8648649"
+            timestampString = "537961151.394994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "-getBtnAction:"
             landmarkType = "7">
             <Locations>
@@ -596,12 +596,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "537952023.865093"
+            timestampString = "537961151.39505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "-getBtnAction:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MGBaseKit/MGVideoManager.mm"
+            timestampString = "537961151.395107"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
+            landmarkName = "-setMaxVideoFrame:videoDevice:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
+            timestampString = "537961151.395306"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "+getYLineArrayWithPoint:andPoint:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RemoteRoboticHead/ViewController/model/FaceModel.m"
+            timestampString = "537961151.39553"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "+getXLineArrayWithYline:andPoint:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

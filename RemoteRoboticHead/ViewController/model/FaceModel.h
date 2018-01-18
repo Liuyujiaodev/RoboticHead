@@ -15,4 +15,9 @@
 
 + (MGFaceInfo*)getCenterPoint:(NSArray*)models;
 
++ (NSArray*)getRelative:(MGFaceInfo*)faceInfo centerInfo:(MGFaceInfo*)centerInfo;
+
++ (NSArray*)getYLineArrayWithPoint:(CGPoint)point1 andPoint:(CGPoint)point2;
+
++ (NSArray*)getXLineArrayWithYline:(NSArray*)yLine andPoint:(CGPoint)point2;
 @end

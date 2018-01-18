@@ -72,6 +72,9 @@ typedef NS_ENUM(NSInteger, BtnType) {
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [FaceModel getYLineArrayWithPoint:CGPointMake(1, 0) andPoint:CGPointMake(-1, 1)];
+        [FaceModel getXLineArrayWithYline:[FaceModel getYLineArrayWithPoint:CGPointMake(1, 0) andPoint:CGPointMake(-1, 1)] andPoint:CGPointMake(1, 3)];
+        
         self.locationArray = [NSMutableArray array];
         self.getArray = [NSMutableArray array];
         self.btnType = BtnTypeLocation;
@@ -213,7 +216,18 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)finishGetData {
     [self.videoManager stopRceording];
-
+    if (self.standardFaceInfo) {
+        MGFaceModelArray* array = [self.getArray objectAtIndex:0];
+        [FaceModel getRelative:[array.faceArray objectAtIndex:0] centerInfo:self.standardFaceInfo];
+    } else {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请先定位" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+   
 }
 
 - (void)palyBtnAction:(UIButton*)btn {
@@ -430,7 +444,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                                           maxFaceCount:0
                                          faceppSetting:^(MGFaceppConfig *config) {
                                              config.minFaceSize = 100;
-                                             config.interval = 40;//帧数
+                                             config.interval = 100;//帧数
                                              config.orientation = 90;
                                              config.detectionMode = MGFppDetectionModeTrackingFast;
                                              config.detectROI = MGDetectROIMake(0, 0, 0, 0);
