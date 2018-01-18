@@ -16,12 +16,20 @@
 #import "MGFacepp.h"
 #import "MGFaceLicenseHandle.h"
 #import "UIButton+Base.h"
+#import "FaceModel.h"
 
 #define APPViewWidth               self.view.frame.size.width
 #define APPViewHeight              self.view.frame.size.height
 #define RGBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 
 #define RETAINED_BUFFER_COUNT 6
+
+#define MAX_GET_TIME  5
+
+typedef NS_ENUM(NSInteger, BtnType) {
+    BtnTypeLocation = 0,//定位
+    BtnTypeGet = 1 //采集
+};
 
 #import "FaceCapController.h"
 
@@ -31,29 +39,24 @@
     dispatch_queue_t _drawFaceQueue;
 }
 
-@property (nonatomic, strong) MGOpenGLView *previewView;
+@property (nonatomic, strong) MGOpenGLView *previewView;//预览头像的view
 
-@property (nonatomic, assign) BOOL hasVideoFormatDescription;
-@property (nonatomic, strong) MGOpenGLRenderer *renderer;
+@property (nonatomic, assign) BOOL hasVideoFormatDescription;//是否为render进行了video的设置
+@property (nonatomic, strong) MGOpenGLRenderer *renderer; //绘制头像上的点
 
-@property (nonatomic, strong) CMMotionManager *motionManager;
+@property (nonatomic, strong) MGFacepp *markManager; //face++处理数据
 
-@property (nonatomic, assign) double allTime;
-@property (nonatomic, assign) NSInteger count;
+@property (nonatomic, strong) MGVideoManager *videoManager; //录制视频
 
-@property (nonatomic, strong) MGFacepp *markManager;
+@property (nonatomic, strong) NSMutableArray* locationArray;//定位的数组
+@property (nonatomic, strong) NSMutableArray* getArray;//采集的数组
 
-@property (nonatomic, strong) MGVideoManager *videoManager;
+@property (nonatomic, assign) BtnType btnType;//区分是采集还是定位
+@property (nonatomic, strong) UIButton* selectBtn;//区分是采集还是定位
+@property (nonatomic, strong) MGFaceInfo* standardFaceInfo;//区分是采集还是定位
+@property (nonatomic, strong) NSTimer* timerForGetData;//采集数据倒计时
+@property (nonatomic, assign) NSInteger time;//区分是采集还是定位
 
-@property (nonatomic, assign) CGRect detectRect;
-@property (nonatomic, assign) CGSize videoSize;
-@property (nonatomic, assign) BOOL faceInfo;
-@property (nonatomic, assign) BOOL faceCompare;
-
-@property (nonatomic, assign) MGFppDetectionMode detectMode;
-
-
-@property (nonatomic, assign) int pointsNum;
 @end
 
 
@@ -69,7 +72,9 @@
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.pointsNum = 81;
+        self.locationArray = [NSMutableArray array];
+        self.getArray = [NSMutableArray array];
+        self.btnType = BtnTypeLocation;
     }
     return self;
 }
@@ -78,6 +83,7 @@
     [super viewDidLoad];
     //首先要检测是否开启相机权限，然后有权限则进行face++授权，授权成功后做初始化
     [self startCheck];
+    //创建UI
     [self creatView];
 }
 
@@ -88,24 +94,12 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.videoManager startRecording];
-    [self setUpCameraLayer];
+ 
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.motionManager stopAccelerometerUpdates];
     [self.videoManager stopRunning];
-}
-
-- (void)stopDetect:(id)sender {
-    [self.motionManager stopAccelerometerUpdates];
-    NSString *videoPath = [self.videoManager stopRceording];
-    NSLog(@"video Path: %@", videoPath);
-    
-    [self.videoManager stopRunning];
-    
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -UI层
@@ -136,6 +130,7 @@
     }
 }
 
+//人脸头像
 - (void)addImageView {
     UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
     imageView.image = [UIImage imageNamed:@"faceArea"];
@@ -143,33 +138,31 @@
 }
 
 - (void)addBtnView {
-    
-    UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 30, APPViewWidth/4, 30)];
+    UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60, APPViewWidth/4, 60)];
     [locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
     [locationBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
-    [locationBtn addTarget:self action:@selector(locationBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [locationBtn setTitle:@"定位" forState:UIControlStateNormal];
-    locationBtn.selected = YES;
+    [locationBtn setTitle:@"停止定位" forState:UIControlStateSelected];
     [self.view addSubview:locationBtn];
     
-    UIButton* getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 30, APPViewWidth/4, 30)];
+    UIButton* getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
     [getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
     [getBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
-    [getBtn addTarget:self action:@selector(getBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [getBtn addTarget:self action:@selector(getBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [getBtn setTitle:@"采集" forState:UIControlStateNormal];
-
+    [getBtn setTitle:@"停止" forState:UIControlStateSelected];
     [self.view addSubview:getBtn];
     
-    UIButton* palyBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*2, APPViewHeight - 30, APPViewWidth/4, 30)];
+    UIButton* palyBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*2, APPViewHeight - 60, APPViewWidth/4, 60)];
     [palyBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
     [palyBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
-    [palyBtn addTarget:self action:@selector(palyBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [palyBtn addTarget:self action:@selector(palyBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [palyBtn setTitle:@"播放" forState:UIControlStateNormal];
     [self.view addSubview:palyBtn];
     
-    UIButton* backBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*3, APPViewHeight - 30, APPViewWidth/4, 30)];
-    [backBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [backBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
+    UIButton* backBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*3, APPViewHeight - 60, APPViewWidth/4, 60)];
+    [backBtn setBackgroundColor:RGBColor(107, 107, 107) forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [backBtn setTitle:@"返回" forState:UIControlStateNormal];
     [self.view addSubview:backBtn];
@@ -177,14 +170,56 @@
 
 #pragma mark - btn action
 
-- (void)locationBtnAction {
-    
+- (void)locationBtnAction:(UIButton*)btn {
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        self.btnType = BtnTypeLocation;
+        [self.locationArray removeAllObjects];
+        [self.videoManager startRecording];
+        [self setUpCameraLayer];
+    } else {
+        [self.videoManager stopRceording];
+        self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
+    }
 }
-- (void)getBtnAction {
-    
+
+- (void)getBtnAction:(UIButton*)btn {
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        [self.getArray removeAllObjects];
+        [self.videoManager startRecording];
+        [self setUpCameraLayer];
+        
+        self.btnType = BtnTypeGet;
+        [self.timerForGetData invalidate];
+        self.time = MAX_GET_TIME;
+        [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
+        self.timerForGetData = [NSTimer timerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            if (self.time > 0) {
+                [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
+            } else {
+                //采集完成
+                [self finishGetData];
+                btn.selected = NO;
+            }
+            self.time--;
+        }];
+        [[NSRunLoop mainRunLoop] addTimer:self.timerForGetData forMode:NSRunLoopCommonModes];
+    } else {
+        [self finishGetData];
+    }
+ 
 }
-- (void)palyBtnAction {
-    
+
+- (void)finishGetData {
+    [self.videoManager stopRceording];
+
+}
+
+- (void)palyBtnAction:(UIButton*)btn {
+    btn.selected = YES;
+    self.selectBtn.selected = NO;
+    self.selectBtn = btn;
 }
 
 - (void)backBtnAction {
@@ -211,36 +246,34 @@
                 /** 开启检测新的一帧，在每次调用 detectWithImageData: 之前调用。 */
                 [self.markManager beginDetectionFrame];
                 
-                NSDate *date1, *date2, *date3;
-                date1 = [NSDate date];
-                
                 NSArray *tempArray = [self.markManager detectWithImageData:imageData];
-               
-                date2 = [NSDate date];
-                double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
-                
-                _allTime += timeUsed;
-                _count ++;
-                
-                //这是获取到的人脸数据
-                MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
-                faceModelArray.getFaceInfo = self.faceInfo;
-                faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
-                faceModelArray.timeUsed = timeUsed;
-                faceModelArray.get3DInfo = NO;
-                [faceModelArray setDetectRect:self.detectRect];
-                
-                for (int i = 0; i < faceModelArray.count; i ++) {
-                    MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
-                    [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:self.pointsNum];
+                if (tempArray.count > 0) {
+                    
+                    NSDate *date1, *date2, *date3;
+                    date1 = [NSDate date];
+                    date2 = [NSDate date];
+                    double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
+                    
+                    //这是获取到的人脸数据
+                    MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
+                    faceModelArray.getFaceInfo = NO;
+                    faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
+                    faceModelArray.timeUsed = timeUsed;
+                    faceModelArray.get3DInfo = NO;
+                    [faceModelArray setDetectRect:CGRectNull];
+                    
+                    for (int i = 0; i < faceModelArray.count; i ++) {
+                        MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
+                        [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
+                    }
+                    date3 = [NSDate date];
+                    double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
+                    faceModelArray.AttributeTimeUsed = timeUsed3D;
+                    
+                    [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
                 }
-                date3 = [NSDate date];
-                double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
-                faceModelArray.AttributeTimeUsed = timeUsed3D;
-                
                 [self.markManager endDetectionFrame];
-                
-                [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
+
             }
             
         });
@@ -254,9 +287,14 @@
         dispatch_async(_drawFaceQueue, ^{
             if (modelArray) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
-                    if (!weakSelf.faceCompare) {
-                        [weakSelf.renderer drawFaceLandMark:modelArray];
+                    MGFaceModelArray* ownModelArray = [FaceModel getOwnModelArrayFromArray:modelArray];
+                    if (self.btnType == BtnTypeLocation) {
+                        [self.locationArray addObject:ownModelArray];
+                    } else {
+                        [self.getArray addObject:ownModelArray];
                     }
+                    [weakSelf.renderer drawFaceLandMark:ownModelArray];
+                    
                     if (!CGRectIsNull(modelArray.detectRect)) {
                         [weakSelf.renderer drawFaceWithRect:modelArray.detectRect];
                     }
@@ -273,6 +311,7 @@
         });
     }
 }
+
 
 #pragma mark - video delegate 视频回来的处理
 -(void)MGCaptureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
@@ -372,11 +411,6 @@
 
 //初始化face++sdk
 - (void)initVideo {
-    self.faceInfo = NO;
-    self.faceCompare = NO;
-    self.detectMode = MGFppDetectionModeTrackingFast;
-    self.detectRect = CGRectNull;
-    
     //视频采集器
     AVCaptureDevicePosition device = [self getCamera:NO];
     self.videoManager = [MGVideoManager videoPreset:AVCaptureSessionPreset640x480
@@ -403,25 +437,11 @@
                                              config.pixelFormatType = PixelFormatTypeRGBA;
                                          }];
     
-    self.videoSize = CGSizeMake(480, 640);
-    
     _detectImageQueue = dispatch_queue_create("com.megvii.image.detect", DISPATCH_QUEUE_SERIAL);
     _drawFaceQueue = dispatch_queue_create("com.megvii.image.drawFace", DISPATCH_QUEUE_SERIAL);
     
     //绘制点
     self.renderer = [[MGOpenGLRenderer alloc] init];
     [self.renderer setShow3DView:NO];
-    
-
-    self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.accelerometerUpdateInterval = 0.3f;
-    
-    //线程更新管理
-    NSOperationQueue *motionQueue = [[NSOperationQueue alloc] init];
-    [motionQueue setName:@"com.megvii.gryo"];
-    [self.motionManager startAccelerometerUpdatesToQueue:motionQueue
-                                             withHandler:^(CMAccelerometerData * _Nullable accelerometerData, NSError * _Nullable error) {
-                                                 
-                                             }];
 }
 @end
