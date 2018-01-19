@@ -17,6 +17,7 @@
 #import "MGFaceLicenseHandle.h"
 #import "UIButton+Base.h"
 #import "FaceModel.h"
+#import "RemoteRoboticHead-Swift.h"
 
 #define APPViewWidth               self.view.frame.size.width
 #define APPViewHeight              self.view.frame.size.height
@@ -72,9 +73,6 @@ typedef NS_ENUM(NSInteger, BtnType) {
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [FaceModel getYLineArrayWithPoint:CGPointMake(1, 0) andPoint:CGPointMake(-1, 1)];
-        [FaceModel getXLineArrayWithYline:[FaceModel getYLineArrayWithPoint:CGPointMake(1, 0) andPoint:CGPointMake(-1, 1)] andPoint:CGPointMake(1, 3)];
-        
         self.locationArray = [NSMutableArray array];
         self.getArray = [NSMutableArray array];
         self.btnType = BtnTypeLocation;
@@ -216,18 +214,10 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)finishGetData {
     [self.videoManager stopRceording];
-    if (self.standardFaceInfo) {
-        MGFaceModelArray* array = [self.getArray objectAtIndex:0];
-        [FaceModel getRelative:[array.faceArray objectAtIndex:0] centerInfo:self.standardFaceInfo];
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请先定位" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alertController addAction:action];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
-   
+    MGFaceModelArray* array = [self.getArray objectAtIndex:0];
+    NSArray* sendArray = [FaceModel getSendData:[array.faceArray objectAtIndex:0]];
+    SendData* send = [[SendData alloc] init];
+    [send initServosDataWithArray:sendArray];
 }
 
 - (void)palyBtnAction:(UIButton*)btn {

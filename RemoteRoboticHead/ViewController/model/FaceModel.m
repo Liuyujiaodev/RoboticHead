@@ -48,6 +48,7 @@
     //求好平均点，放到points里
     NSMutableArray* points = [NSMutableArray array];
     for (NSArray* faceArray in allPointArray) {
+//        NSLog(@"--------%ld",[allPointArray indexOfObject:faceArray]);
         [points addObject:[NSValue valueWithCGPoint:[self centerPoint:faceArray]]];
     }
     
@@ -60,27 +61,42 @@
 + (CGPoint)centerPoint:(NSArray*)pointArray  {
     
     CGFloat totalX = 0.0, totalY = 0.0;
-    
+//    CGFloat maxX = 0.0;
+//    CGFloat maxY = 0.0;
+//    CGFloat minY = 0.0;
+//    CGFloat minX = 0.0;//测试最大值最小值
     for (int i = 0; i < pointArray.count; i ++) {
         CGPoint pointer = [pointArray[i] CGPointValue];
-        totalX += pointer.x;
-        totalY += pointer.y;
+//
+//        if  (pointer.x > maxX){
+//            maxX = pointer.x;
+//        }
+//        if (pointer.y > maxY) {
+//            maxY = pointer.y;
+//        }
+//        if (pointer.x < minX) {
+//            minX = pointer.x;
+//        }
+//        if (pointer.y < minY) {
+//            minY = pointer.y;
+//        }
+//        totalX += pointer.x;
+//        totalY += pointer.y;
     }
     CGPoint point = CGPointMake(totalX/pointArray.count, totalY/pointArray.count);
+//    NSLog(@"------maxX:%f------minX:%f-------maxY:%f-------minY:%f", maxX,minX,maxY,minY);
     return point;
 }
 
 //转换成需要发送的数据
-+ (NSArray*)getRelative:(MGFaceInfo*)faceInfo centerInfo:(MGFaceInfo*)centerInfo {
++ (NSArray*)getSendData:(MGFaceInfo*)faceInfo {
     NSMutableArray* array = [NSMutableArray array];
     
     NSArray* yLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:12] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:13] CGPointValue]];
     NSArray* xLine = [self getXLineArrayWithYline:yLine andPoint:[[faceInfo.points objectAtIndex:12] CGPointValue]];
 
-    for (int i = 0; i < centerInfo.points.count; i ++) {
-        CGPoint standardPoint = [centerInfo.points[i] CGPointValue];
+    for (int i = 0; i <faceInfo.points.count; i ++) {
         CGPoint currentPoint = [faceInfo.points[i] CGPointValue];
-        CGPoint relativeStandardPoint = [self getRelativePoint:standardPoint yLine:yLine xLine:xLine];
         CGPoint relativeCurrentPoint = [self getRelativePoint:currentPoint yLine:yLine xLine:xLine];
         
     }
@@ -120,9 +136,6 @@
     return newPoint;
 }
 
-//映射到区间内
-+ (CGFloat)map:(CGFloat)x withMin:(CGFloat)min max:(CGFloat)max outMin:(CGFloat)outMin outMax:(CGFloat)outMax {
-    return (x - min) * (outMax - outMin) / (max - min) + outMin;
-}
+
 
 @end

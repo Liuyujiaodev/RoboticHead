@@ -47,6 +47,8 @@ public func wirteToPeripheralOne(servonu:Int,angle:UInt8){
     dataperipheral!.writeValue(sendingAngle as Data, for: datawriteCharacteristic!, type: .withoutResponse)
 }
 //电动机数据
+
+
 struct Servos {
     var name:String
     var currentAngle:UInt8
