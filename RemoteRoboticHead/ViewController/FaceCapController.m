@@ -298,6 +298,9 @@ typedef NS_ENUM(NSInteger, BtnType) {
         dispatch_async(_drawFaceQueue, ^{
             if (modelArray) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
+                    MGFaceModelArray* showArray = [FaceModel getShowArray:modelArray];
+                    [weakSelf.renderer drawFaceLandMark:showArray];
+
                     MGFaceModelArray* ownModelArray = [FaceModel getOwnModelArrayFromArray:modelArray];
                     if (self.btnType == BtnTypeLocation) {
                         [self.locationArray addObject:ownModelArray];
@@ -309,7 +312,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         //保存到视频组
                         [self.getArray addObject:sendArray];
                     }
-                    [weakSelf.renderer drawFaceLandMark:ownModelArray];
+                    //多显示几个点
                     
                     if (!CGRectIsNull(modelArray.detectRect)) {
                         [weakSelf.renderer drawFaceWithRect:modelArray.detectRect];

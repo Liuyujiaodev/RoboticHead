@@ -20,6 +20,7 @@ import Foundation
         for _ in 0...4 {
             outdatas.append(90)
         }
+        print(outdatas)
         writeToPeripheral(bytes: outdatas)
     }
     

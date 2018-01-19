@@ -11,19 +11,31 @@
 #define Face_Array @[@"20", @"28",@"0",@"1",@"2",@"3",@"4",@"9",@"10",@"11",@"12",@"13",@"34",@"35",@"44",@"45",@"55",@"64"]
 //face++数组对应部位20左眉0 28右眉1  0左眼眼球2 1左眼左角3 2左眼右角4  3左眼上5  4左眼下6 9右眼球7 10右眼左脚8 11右眼右角9 12右眼上10 13右眼下11 34鼻子12 35人中13 44嘴角左14 45嘴角右15  55嘴角下16  64下巴17
 
+#define Show_Array @[@"20", @"28",@"0",@"1",@"2",@"3",@"4",@"9",@"10",@"11",@"12",@"13",@"34",@"35",@"44",@"45",@"55",@"64",@"65", @"67", @"70", @"73", @"75", @"78", @"72", @"80", @"40", @"41"]
+
 @implementation FaceModel
 
 + (MGFaceModelArray*)getOwnModelArrayFromArray:(MGFaceModelArray*)modelArray {
     for (MGFaceInfo* faceInfo in modelArray.faceArray) {
         NSMutableArray* points = [NSMutableArray array];
         for (NSString* index in Face_Array) {
-            [points addObject:[faceInfo.points objectAtIndex:index.intValue]];
+            [points addObject:[faceInfo.points objectAtIndex:[Face_Array indexOfObject:index]]];
         }
         faceInfo.points = points;
     }
     return modelArray;
 }
 
++ (MGFaceModelArray*)getShowArray:(MGFaceModelArray*)modelArray {
+    for (MGFaceInfo* faceInfo in modelArray.faceArray) {
+        NSMutableArray* points = [NSMutableArray array];
+        for (NSString* index in Show_Array) {
+            [points addObject:[faceInfo.points objectAtIndex:index.intValue]];
+        }
+        faceInfo.points = points;
+    }
+    return modelArray;
+}
 
 + (MGFaceInfo*)getCenterPoint:(NSArray*)models {
     NSMutableArray* allPointArray = [NSMutableArray array];//将所有的点分类放到这18数组中
@@ -162,7 +174,7 @@
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:0 inMax:106 outMin:20 outMax:160]]];
     
     //    Servos(name: "左唇前后", currentAngle: array[10] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:0 inMax:76 outMin:20 outMax:160]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:0 inMax:80 outMin:20 outMax:160]]];
     
     //    Servos(name: "右唇前后", currentAngle: array[11] as! UInt8, minA: 20, maxA: 160),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:0 inMax:76 outMin:20 outMax:160]]];
