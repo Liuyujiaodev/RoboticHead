@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) MGFaceInfo* standardFaceInfo;//区分是采集还是定位
 @property (nonatomic, strong) NSTimer* timerForGetData;//采集数据倒计时
 @property (nonatomic, assign) NSInteger time;//区分是采集还是定位
-
+@property (nonatomic, strong) FileUtil* fileUtil;
 @end
 
 
@@ -213,17 +213,24 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)finishGetData {
+    [self.timerForGetData invalidate];
     [self.videoManager stopRceording];
-    MGFaceModelArray* array = [self.getArray objectAtIndex:0];
-    NSArray* sendArray = [FaceModel getSendData:[array.faceArray objectAtIndex:0]];
-    SendData* send = [[SendData alloc] init];
-    [send initServosDataWithArray:sendArray];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"新建表情" message:@"输入表情名称" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UITextField *textField = alertController.textFields.firstObject;
+        [self.fileUtil saveFileWithFileName:textField.text data:self.getArray];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)palyBtnAction:(UIButton*)btn {
-    btn.selected = YES;
-    self.selectBtn.selected = NO;
-    self.selectBtn = btn;
+    NSArray* array = [self.fileUtil getFileList];
+    NSArray* data = [self.fileUtil getFileDataWithFileName:[array objectAtIndex:0]];
 }
 
 - (void)backBtnAction {
@@ -295,7 +302,12 @@ typedef NS_ENUM(NSInteger, BtnType) {
                     if (self.btnType == BtnTypeLocation) {
                         [self.locationArray addObject:ownModelArray];
                     } else {
-                        [self.getArray addObject:ownModelArray];
+                        //向蓝牙发送数据
+                        NSArray* sendArray = [FaceModel getSendData:[ownModelArray.faceArray objectAtIndex:0]];
+                        SendData* send = [[SendData alloc] init];
+                        [send writeDataWithArray:sendArray];
+                        //保存到视频组
+                        [self.getArray addObject:sendArray];
                     }
                     [weakSelf.renderer drawFaceLandMark:ownModelArray];
                     
@@ -448,4 +460,13 @@ typedef NS_ENUM(NSInteger, BtnType) {
     self.renderer = [[MGOpenGLRenderer alloc] init];
     [self.renderer setShow3DView:NO];
 }
+
+-(FileUtil*)fileUtil {
+    if (!_fileUtil) {
+        _fileUtil = [[FileUtil alloc] init];
+    }
+    return _fileUtil;
+}
+
+
 @end

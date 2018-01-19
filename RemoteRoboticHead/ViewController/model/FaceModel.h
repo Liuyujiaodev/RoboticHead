@@ -17,4 +17,5 @@
 
 + (NSArray*)getSendData:(MGFaceInfo*)faceInfo;
 
++ (CGPoint)getRelativePoint:(CGPoint)point yLine:(NSArray*)yLine xLine:(NSArray*)xLine;
 @end
