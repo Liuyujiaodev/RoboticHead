@@ -28,8 +28,9 @@
 #define MAX_GET_TIME  5
 
 typedef NS_ENUM(NSInteger, BtnType) {
-    BtnTypeLocation = 0,//定位
-    BtnTypeGet = 1 //采集
+    BtnTypeNone = 0,//不做数据采集工作，只显示摄像头内容
+    BtnTypeLocation = 1,//采集定位的数据
+    BtnTypeGet = 2 //采集发送蓝牙的数据
 };
 
 #import "FaceCapController.h"
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     if (self) {
         self.locationArray = [NSMutableArray array];
         self.getArray = [NSMutableArray array];
-        self.btnType = BtnTypeLocation;
+        self.btnType = BtnTypeNone;//进来后不采集数据
     }
     return self;
 }
@@ -86,6 +87,11 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self startCheck];
     //创建UI
     [self creatView];
+    
+    //初始化摄像头
+    [self.videoManager startRecording];
+    //显示摄像头拍摄的内容
+    [self setUpCameraLayer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -176,10 +182,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
     if (btn.selected) {
         self.btnType = BtnTypeLocation;
         [self.locationArray removeAllObjects];
-        [self.videoManager startRecording];
-        [self setUpCameraLayer];
     } else {
-        [self.videoManager stopRceording];
+        self.btnType = BtnTypeNone;
         self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
     }
 }
@@ -214,7 +218,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)finishGetData {
     [self.timerForGetData invalidate];
-    [self.videoManager stopRceording];
+    self.btnType = BtnTypeNone;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"新建表情" message:@"输入表情名称" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
     }];
