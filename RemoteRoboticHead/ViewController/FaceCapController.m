@@ -62,6 +62,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) UILabel* showTextLabel;//文件操作的处理器
 
 @property (nonatomic, strong) UIImageView* faceImgView;//人脸的iamgeView
+@property (nonatomic, strong) UIImageView* getDataImageView;//人脸的iamgeView
+
 @end
 
 
@@ -210,13 +212,20 @@ typedef NS_ENUM(NSInteger, BtnType) {
     btn.selected = !btn.selected;
     if (btn.selected) {
         [self.getArray removeAllObjects];
-        [self.videoManager startRecording];
-        [self setUpCameraLayer];
+        //显示左上角采集的图标
+        self.getDataImageView.hidden = NO;
+        //提示正在采集的label
         self.showTextLabel.text = @"正在采集";
+        //设置数据收集的状态
         self.btnType = BtnTypeGet;
+        
+        //开启时间倒计时
         [self.timerForGetData invalidate];
         self.time = MAX_GET_TIME;
+        //修改按钮为几秒后停止
         [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
+        
+        //启动倒计时，修改按钮的title，时间到时停止
         self.timerForGetData = [NSTimer timerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
             if (self.time > 0) {
                 [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
@@ -229,7 +238,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
         }];
         [[NSRunLoop mainRunLoop] addTimer:self.timerForGetData forMode:NSRunLoopCommonModes];
     } else {
-        
+        //手动点停止按钮，采集完成
         [self finishGetData];
     }
  
@@ -522,5 +531,15 @@ typedef NS_ENUM(NSInteger, BtnType) {
         [self.view addSubview:_showTextLabel];
     }
     return _showTextLabel;
+}
+
+- (UIImageView*)getDataImageView {
+    if (!_getDataImageView) {
+        _getDataImageView = [[UIImageView alloc] initWithFrame:CGRectMake(40, 40, 80, 80)];
+        _getDataImageView.image = [UIImage imageNamed:@"faceArea"];
+        _getDataImageView.hidden = YES;
+        [self.view addSubview:_getDataImageView];
+    }
+    return _getDataImageView;
 }
 @end
