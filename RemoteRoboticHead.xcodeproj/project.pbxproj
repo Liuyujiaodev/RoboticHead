@@ -34,6 +34,8 @@
 		09ABCDA620118515000999D6 /* SendData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDA520118515000999D6 /* SendData.swift */; };
 		09ABCDAC2011D5D8000999D6 /* WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDAB2011D5D8000999D6 /* WriteToFile.swift */; };
 		09ABCDAF2012E783000999D6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABCDAE2012E782000999D6 /* AudioToolbox.framework */; };
+		09ABCDB32012ECCD000999D6 /* ShowData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09ABCDB22012ECCD000999D6 /* ShowData.storyboard */; };
+		09ABCDB52013191B000999D6 /* ShowDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDB42013191B000999D6 /* ShowDataController.swift */; };
 		09B23557200EFDCB005959DD /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B23556200EFDCB005959DD /* Util.m */; };
 		5F3BD80E200912E100110755 /* FaceCapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80D200912E100110755 /* FaceCapViewController.swift */; };
 		5F3BD810200913E000110755 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80F200913E000110755 /* ControlViewController.swift */; };
@@ -108,6 +110,8 @@
 		09ABCDA520118515000999D6 /* SendData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendData.swift; sourceTree = "<group>"; };
 		09ABCDAB2011D5D8000999D6 /* WriteToFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteToFile.swift; sourceTree = "<group>"; };
 		09ABCDAE2012E782000999D6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		09ABCDB22012ECCD000999D6 /* ShowData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ShowData.storyboard; sourceTree = "<group>"; };
+		09ABCDB42013191B000999D6 /* ShowDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDataController.swift; sourceTree = "<group>"; };
 		09B23555200EFDCB005959DD /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		09B23556200EFDCB005959DD /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		5F3BD80D200912E100110755 /* FaceCapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCapViewController.swift; sourceTree = "<group>"; };
@@ -241,6 +245,8 @@
 				09ABCD9E20102AB5000999D6 /* model */,
 				098378F7200F305F001FF8DB /* FaceCapController.h */,
 				098378F8200F305F001FF8DB /* FaceCapController.m */,
+				09ABCDB22012ECCD000999D6 /* ShowData.storyboard */,
+				09ABCDB42013191B000999D6 /* ShowDataController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -443,6 +449,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09ABCDB32012ECCD000999D6 /* ShowData.storyboard in Resources */,
 				09609D9B200C4ABA0051AE10 /* megviifacepp_0_5_2_model in Resources */,
 				09837903200F394C001FF8DB /* VideoFrag.glsl in Resources */,
 				09837902200F394C001FF8DB /* VideoVert.glsl in Resources */,
@@ -465,6 +472,7 @@
 			files = (
 				09837917200F3C84001FF8DB /* UIImage+Base.m in Sources */,
 				09609DA0200C4AC30051AE10 /* MGFaceLicenseHandle.m in Sources */,
+				09ABCDB52013191B000999D6 /* ShowDataController.swift in Sources */,
 				5F3BD81920099EF500110755 /* test.mm in Sources */,
 				5F3BD83E2009DACB00110755 /* CSTableViewCell.swift in Sources */,
 				09ABCDA220102AD2000999D6 /* FaceModel.m in Sources */,

@@ -170,7 +170,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [palyBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
     [palyBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
     [palyBtn addTarget:self action:@selector(palyBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [palyBtn setTitle:@"播放" forState:UIControlStateNormal];
+    [palyBtn setTitle:@"数据" forState:UIControlStateNormal];
     [self.view addSubview:palyBtn];
     
     UIButton* backBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*3, APPViewHeight - 60, APPViewWidth/4, 60)];
@@ -253,8 +253,11 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)palyBtnAction:(UIButton*)btn {
-    NSArray* array = [self.fileUtil getFileList];
-    NSArray* data = [self.fileUtil getFileDataWithFileName:[array objectAtIndex:0]];
+    UIStoryboard *UpgradeHardware = [UIStoryboard storyboardWithName:@"ShowData" bundle:nil];
+    
+    UIViewController *showDataVC = [UpgradeHardware instantiateViewControllerWithIdentifier:@"ShowDataController"];//跳转VC的名称
+                                 
+    [self presentViewController:showDataVC animated:YES completion:nil];
 }
 
 - (void)backBtnAction {

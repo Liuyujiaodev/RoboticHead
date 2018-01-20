@@ -10,11 +10,11 @@ import Foundation
 
 @objc class FileUtil : NSObject {
     let fileManager = FileManager.default
+    let basePath = NSHomeDirectory() + "/Documents/action/"
 
     @objc public func saveFile(fileName: String, data:NSArray) {
         // 储存的沙盒路径
         
-        let basePath = NSHomeDirectory() + "/Documents/action/"
         if !fileManager.fileExists(atPath: basePath) {
            try! fileManager.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
         }
@@ -23,24 +23,22 @@ import Foundation
 }
     
     @objc public func getFileList()->NSArray {
-        let basePath =  NSHomeDirectory() + "/Documents/action/"
         var array : NSArray? = nil
-        do {
-            array = try? fileManager.contentsOfDirectory(atPath: basePath) as! NSArray
-        } catch let error as NSError {
-            print("get file path error: \(error)")
-        }
+        array = try? fileManager.contentsOfDirectory(atPath: basePath) as NSArray
         return array!
     }
     
     @objc public func getFileData(fileName: String)->NSArray {
-        let basePath = NSHomeDirectory() + "/Documents/action/"
         let filePath = basePath + fileName
         let array = NSArray(contentsOfFile:filePath)
         
         return array!
     }
 
+    public func removeFile(fileName: String) {
+        let filePath = basePath + fileName
+        try! fileManager.removeItem(atPath: filePath)
+    }
 }
 
 
