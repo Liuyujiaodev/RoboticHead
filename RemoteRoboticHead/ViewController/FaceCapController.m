@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) MGFaceInfo* standardFaceInfo;//区分是采集还是定位
 @property (nonatomic, strong) NSTimer* timerForGetData;//采集数据倒计时
 @property (nonatomic, assign) NSInteger time;//区分是采集还是定位
-@property (nonatomic, strong) FileUtil* fileUtil;
+@property (nonatomic, strong) FileUtil* fileUtil;//文件操作的处理器
 @end
 
 
@@ -189,6 +189,13 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)getBtnAction:(UIButton*)btn {
+    if (!self.standardFaceInfo) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请先进行定位" message:@"点击定位按钮进行定位" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:cancelAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
     btn.selected = !btn.selected;
     if (btn.selected) {
         [self.getArray removeAllObjects];
