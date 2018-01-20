@@ -9,7 +9,8 @@
 import UIKit
 
 class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView : UITableView!
+    @IBOutlet weak var showText : UILabel!
     
     var dataSource : NSMutableArray = NSMutableArray()
 
@@ -18,6 +19,7 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let fileUtil = FileUtil.init()
         dataSource = fileUtil.getFileList().mutableCopy() as! NSMutableArray
         tableView.reloadData()
+        showText.text = "共有 \(dataSource.count)条数据"
         // Do any additional setup after loading the view.
     }
 
@@ -38,13 +40,24 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView!.deselectRow(at: indexPath, animated: true)
+        showText.text = "正在发送数据"
+
         let fileUtil = FileUtil.init()
         let filePath : String = dataSource.object(at: indexPath.row) as! String
         let dataArray = fileUtil.getFileData(fileName: filePath) as NSArray
         let sendData : SendData = SendData.init()
-        for item in dataArray {
-            sendData.writeData(array: item as! Array<NSNumber>)
-            Thread.sleep(forTimeInterval: 0.1)
+
+        DispatchQueue.global().async {
+            //开启新线程去发送数据
+            for item in dataArray {
+                sendData.writeData(array: item as! Array<NSNumber>)
+                Thread.sleep(forTimeInterval: 0.1)
+            }
+            DispatchQueue.main.async {
+                self.showText.text = "发送完成"
+            }
+            
         }
     }
     

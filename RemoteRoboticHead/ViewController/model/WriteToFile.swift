@@ -25,7 +25,10 @@ import Foundation
     @objc public func getFileList()->NSArray {
         var array : NSArray? = nil
         array = try? fileManager.contentsOfDirectory(atPath: basePath) as NSArray
-        return array!
+        if (array != nil) {
+            return array!
+        }
+        return []
     }
     
     @objc public func getFileData(fileName: String)->NSArray {

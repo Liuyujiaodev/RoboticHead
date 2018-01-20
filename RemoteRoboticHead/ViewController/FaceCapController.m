@@ -192,18 +192,19 @@ typedef NS_ENUM(NSInteger, BtnType) {
     } else {
         self.btnType = BtnTypeNone;
         self.showTextLabel.text = @"定位结束";
-        self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
-        self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
-        AudioServicesPlaySystemSound(1012);
+        if (self.locationArray.count > 0) {
+            self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
+            self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
+            AudioServicesPlaySystemSound(1012);
+        } else {
+            [self alertErrorMsg:@"定位失败" msg:@"请重新定位"];
+        }
     }
 }
 
 - (void)getBtnAction:(UIButton*)btn {
     if (!self.standardFaceInfo) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请先进行定位" message:@"点击定位按钮进行定位" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleCancel handler:nil];
-        [alertController addAction:cancelAction];
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self alertErrorMsg:@"请先进行定位" msg:@"点击定位按钮进行定位"];
         return;
     }
     btn.selected = !btn.selected;
@@ -492,6 +493,14 @@ typedef NS_ENUM(NSInteger, BtnType) {
     //绘制点
     self.renderer = [[MGOpenGLRenderer alloc] init];
     [self.renderer setShow3DView:NO];
+}
+
+//公共弹出alert方法
+- (void)alertErrorMsg:(NSString*)title msg:(NSString*)msg {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 //以下有可能用不到，所以等用到的时候再去创建对象

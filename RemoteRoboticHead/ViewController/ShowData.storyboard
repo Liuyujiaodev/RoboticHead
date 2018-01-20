@@ -18,19 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nSc-Fm-RqJ">
-                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
-                                <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="OYf-tF-9OC"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="tintColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                <state key="normal" title="返回"/>
-                                <connections>
-                                    <action selector="backBtnAction:" destination="zBI-vv-4KX" eventType="touchUpInside" id="cb5-vQ-fFt"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="数据" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8dC-pE-a8b">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                 <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -60,19 +47,36 @@
                                     <outlet property="delegate" destination="zBI-vv-4KX" id="enl-jy-Kqp"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZ5-G0-wHn">
+                                <rect key="frame" x="0.0" y="607" width="375" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="071-xL-lIF">
+                                <rect key="frame" x="0.0" y="628" width="375" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="返回">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backBtnAction:" destination="zBI-vv-4KX" eventType="touchUpInside" id="TAZ-DT-Chu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="nSc-Fm-RqJ" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="2k1-uG-y1C"/>
                             <constraint firstItem="PId-kS-dhn" firstAttribute="trailing" secondItem="8dC-pE-a8b" secondAttribute="trailing" id="CW3-dl-NWX"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="HGP-ZI-giH"/>
-                            <constraint firstItem="PId-kS-dhn" firstAttribute="bottom" secondItem="nSc-Fm-RqJ" secondAttribute="bottom" id="TfV-MN-K9q"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="top" secondItem="PId-kS-dhn" secondAttribute="top" constant="-20" id="U9u-iC-kfB"/>
-                            <constraint firstItem="PId-kS-dhn" firstAttribute="trailing" secondItem="nSc-Fm-RqJ" secondAttribute="trailing" id="dH1-J4-Wne"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PId-kS-dhn"/>
                     </view>
                     <connections>
+                        <outlet property="showText" destination="JZ5-G0-wHn" id="whq-Jh-WB9"/>
                         <outlet property="tableView" destination="cRt-Gp-dFu" id="Bt2-fu-Mxi"/>
                     </connections>
                 </viewController>

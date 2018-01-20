@@ -13,8 +13,8 @@
 
 // 访问 https://www.faceplusplus.com.cn， 登录后在控制台生成对应的 key 和 secret 填写到下面的字符串中
 
-#define MG_LICENSE_KEY      @"MFqVtvBZFPnsT3XaTTHorn-qvgEUlQfq" // api_key
-#define MG_LICENSE_SECRET    @"k8tUuesiMQcmSDVl1uLlTD4fEAjUFj0i" // api_secret
+#define MG_LICENSE_KEY      @"TJgHRHFZNgIm4xB0_ehv2TGk_kOTu6mp" // api_key
+#define MG_LICENSE_SECRET    @"3AxuE65Ek7ZTh9dDaJhdHvTAzvVViR90" // api_secret
 
 
 #endif /* MGNetAccount_example_h */
