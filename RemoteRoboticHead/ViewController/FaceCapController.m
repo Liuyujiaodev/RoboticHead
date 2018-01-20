@@ -95,11 +95,6 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self startCheck];
     //创建UI
     [self creatView];
-    
-    //初始化摄像头
-    [self.videoManager startRecording];
-    //显示摄像头拍摄的内容
-    [self setUpCameraLayer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,7 +104,10 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
- 
+    //初始化摄像头
+    [self.videoManager startRecording];
+    //显示摄像头拍摄的内容
+    [self setUpCameraLayer];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -119,6 +117,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 #pragma mark -UI层
 - (void)creatView{
+    [self addTopView];
     [self addImageView];
     [self addBtnView];
 }
@@ -143,6 +142,20 @@ typedef NS_ENUM(NSInteger, BtnType) {
         self.previewView.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0);
         
     }
+}
+
+- (void)addTopView {
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, 54)];
+    view.backgroundColor = RGBColor(253, 146, 38);
+    [self.view addSubview:view];
+    
+    UILabel* topLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, APPViewWidth, 30)];
+    topLabel.text = @"脸部动作捕捉";
+    topLabel.textColor = [UIColor whiteColor];
+    topLabel.textAlignment = NSTextAlignmentCenter;
+    topLabel.font = [UIFont systemFontOfSize:17];
+    topLabel.backgroundColor =  RGBColor(253, 146, 38);
+    [view addSubview:topLabel];
 }
 
 //人脸头像
