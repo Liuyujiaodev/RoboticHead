@@ -59,6 +59,9 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) NSTimer* timerForGetData;//采集数据倒计时
 @property (nonatomic, assign) NSInteger time;//区分是采集还是定位
 @property (nonatomic, strong) FileUtil* fileUtil;//文件操作的处理器
+@property (nonatomic, strong) UILabel* showTextLabel;//文件操作的处理器
+
+@property (nonatomic, strong) UIImageView* faceImgView;//人脸的iamgeView
 @end
 
 
@@ -139,9 +142,9 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 //人脸头像
 - (void)addImageView {
-    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
-    imageView.image = [UIImage imageNamed:@"faceArea"];
-    [self.view addSubview:imageView];
+    self.faceImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
+    self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
+    [self.view addSubview:self.faceImgView];
 }
 
 - (void)addBtnView {
@@ -180,11 +183,16 @@ typedef NS_ENUM(NSInteger, BtnType) {
 - (void)locationBtnAction:(UIButton*)btn {
     btn.selected = !btn.selected;
     if (btn.selected) {
+        self.showTextLabel.hidden = NO;
+        self.showTextLabel.text = @"开始定位";
         self.btnType = BtnTypeLocation;
         [self.locationArray removeAllObjects];
     } else {
         self.btnType = BtnTypeNone;
+        self.showTextLabel.text = @"定位结束";
         self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
+        self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
+        AudioServicesPlaySystemSound(1012);
     }
 }
 
@@ -478,6 +486,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self.renderer setShow3DView:NO];
 }
 
+//以下有可能用不到，所以等用到的时候再去创建对象
 -(FileUtil*)fileUtil {
     if (!_fileUtil) {
         _fileUtil = [[FileUtil alloc] init];
@@ -485,5 +494,16 @@ typedef NS_ENUM(NSInteger, BtnType) {
     return _fileUtil;
 }
 
-
+- (UILabel*)showTextLabel {
+    if (!_showTextLabel) {
+        _showTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60 - 27, APPViewWidth, 27)];
+        _showTextLabel.textAlignment = NSTextAlignmentCenter;
+        _showTextLabel.textColor = [UIColor whiteColor];
+        _showTextLabel.backgroundColor = RGBColor(253, 146, 38);
+        _showTextLabel.font = [UIFont systemFontOfSize:14];
+        _showTextLabel.hidden = YES;
+        [self.view addSubview:_showTextLabel];
+    }
+    return _showTextLabel;
+}
 @end

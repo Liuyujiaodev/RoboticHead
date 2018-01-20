@@ -33,6 +33,7 @@
 		09ABCDA220102AD2000999D6 /* FaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDA120102AD2000999D6 /* FaceModel.m */; };
 		09ABCDA620118515000999D6 /* SendData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDA520118515000999D6 /* SendData.swift */; };
 		09ABCDAC2011D5D8000999D6 /* WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDAB2011D5D8000999D6 /* WriteToFile.swift */; };
+		09ABCDAF2012E783000999D6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABCDAE2012E782000999D6 /* AudioToolbox.framework */; };
 		09B23557200EFDCB005959DD /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B23556200EFDCB005959DD /* Util.m */; };
 		5F3BD80E200912E100110755 /* FaceCapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80D200912E100110755 /* FaceCapViewController.swift */; };
 		5F3BD810200913E000110755 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80F200913E000110755 /* ControlViewController.swift */; };
@@ -106,6 +107,7 @@
 		09ABCDA120102AD2000999D6 /* FaceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceModel.m; sourceTree = "<group>"; };
 		09ABCDA520118515000999D6 /* SendData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendData.swift; sourceTree = "<group>"; };
 		09ABCDAB2011D5D8000999D6 /* WriteToFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteToFile.swift; sourceTree = "<group>"; };
+		09ABCDAE2012E782000999D6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		09B23555200EFDCB005959DD /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		09B23556200EFDCB005959DD /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		5F3BD80D200912E100110755 /* FaceCapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCapViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09ABCDAF2012E783000999D6 /* AudioToolbox.framework in Frameworks */,
 				09609D8E200C4A600051AE10 /* AVFoundation.framework in Frameworks */,
 				09609D9A200C4ABA0051AE10 /* libMGFacepp-0.5.2.a in Frameworks */,
 				09609D8C200C4A5A0051AE10 /* CoreMotion.framework in Frameworks */,
@@ -152,6 +155,7 @@
 		09609D87200C4A350051AE10 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				09ABCDAE2012E782000999D6 /* AudioToolbox.framework */,
 				09609D8D200C4A600051AE10 /* AVFoundation.framework */,
 				09609D8B200C4A5A0051AE10 /* CoreMotion.framework */,
 				09609D89200C4A520051AE10 /* CoreMedia.framework */,
