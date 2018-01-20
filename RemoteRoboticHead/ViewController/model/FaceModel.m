@@ -39,23 +39,10 @@
 
 + (MGFaceInfo*)getCenterPoint:(NSArray*)models {
     NSMutableArray* allPointArray = [NSMutableArray array];//将所有的点分类放到这18数组中
-    
-    CGFloat p = 0.0,y = 0.0, r= 0.0;
-    
+        
     //该循环主要是将18个点进行规整，每一个点都放到对应的数组里，以便求平均数
     for (MGFaceModelArray* modelArray in models) {
         for (MGFaceInfo* faceInfo in modelArray.faceArray) {
-            
-            if (faceInfo.pitch > p) {
-                p = faceInfo.pitch;
-            }
-            if (faceInfo.yaw > y) {
-                y = faceInfo.yaw;
-            }
-            if (faceInfo.roll > r) {
-                r = faceInfo.roll;
-            }
-            
             NSArray* yLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:12] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:13] CGPointValue]];
             NSArray* xLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:3] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:9] CGPointValue]];
             for (NSString* indexString in Face_Array) {
@@ -75,7 +62,6 @@
             }
         }
     }
-    NSLog(@"-----p---%lf------%lf------%lf",p, y, r);
 
     //求好平均点，放到points里
     NSMutableArray* points = [NSMutableArray array];
@@ -88,7 +74,8 @@
         [self printMax:faceArray];
     
     }
-    MGFaceInfo* faceInfo = [((MGFaceModelArray*)[models objectAtIndex:0]).faceArray objectAtIndex:0];
+    //初始化一个faceinfo，用于放计算好平均点的point
+    MGFaceInfo* faceInfo = [[MGFaceInfo alloc] init];
     faceInfo.points = points;
     return faceInfo;
 }
@@ -137,9 +124,18 @@
 }
 
 //转换成需要发送的数据
-+ (NSArray*)getSendData:(MGFaceInfo*)faceInfo {
++ (NSArray*)getSendData:(NSArray*)faceArray {
     NSMutableArray* array = [NSMutableArray array];
+    //如果没有数据则发送蓝牙数据90
+    if (faceArray.count == 0) {
+        for (int i = 0; i < 16; i++) {
+            [array addObject:[NSNumber numberWithInt:90]];
+        }
+        return array;
+    }
     
+    MGFaceInfo* faceInfo = [faceArray objectAtIndex:0];
+    //
     NSArray* yLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:12] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:13] CGPointValue]];
     NSArray* xLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:1] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:11] CGPointValue]];
     for (int i = 0; i <faceInfo.points.count; i ++) {

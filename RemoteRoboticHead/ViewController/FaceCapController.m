@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 @property (nonatomic, strong) UIImageView* faceImgView;//人脸的iamgeView
 @property (nonatomic, strong) UIImageView* getDataImageView;//人脸的iamgeView
+@property (nonatomic, strong) UILabel* errorMsgLabel;//获取不到数据的时候显示
 
 @end
 
@@ -296,29 +297,38 @@ typedef NS_ENUM(NSInteger, BtnType) {
                 
                 NSArray *tempArray = [self.markManager detectWithImageData:imageData];
                 
-                NSDate *date1, *date2, *date3;
-                date1 = [NSDate date];
-                date2 = [NSDate date];
-                double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
                 
-                //这是获取到的人脸数据
-                MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
-                faceModelArray.getFaceInfo = NO;
-                faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
-                faceModelArray.timeUsed = timeUsed;
-                faceModelArray.get3DInfo = NO;
-                [faceModelArray setDetectRect:CGRectNull];
-                for (int i = 0; i < faceModelArray.count; i ++) {
-                    MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
-                    [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
-                }
-                date3 = [NSDate date];
-                double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
-                faceModelArray.AttributeTimeUsed = timeUsed3D;
-                
-                [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
-                [self.markManager endDetectionFrame];
-
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (tempArray.count==0) {
+                        self.errorMsgLabel.hidden = NO;
+                    } else {
+                        self.errorMsgLabel.hidden = YES;
+                    }
+                    // 还可以嵌套：再回到子线程做其他事情
+                    dispatch_async(_detectImageQueue, ^{
+                        NSDate *date1, *date2, *date3;
+                        date1 = [NSDate date];
+                        date2 = [NSDate date];
+                        double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
+                        //这是获取到的人脸数据
+                        MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
+                        faceModelArray.getFaceInfo = NO;
+                        faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
+                        faceModelArray.timeUsed = timeUsed;
+                        faceModelArray.get3DInfo = NO;
+                        [faceModelArray setDetectRect:CGRectNull];
+                        for (int i = 0; i < faceModelArray.count; i ++) {
+                            MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
+                            [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
+                        }
+                        date3 = [NSDate date];
+                        double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
+                        faceModelArray.AttributeTimeUsed = timeUsed3D;
+                        
+                        [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
+                        [self.markManager endDetectionFrame];
+                    });
+                });
             }
             
         });
@@ -345,7 +355,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         [self.locationArray addObject:ownModelArray];
                     } else if (self.btnType == BtnTypeGet){
                         //向蓝牙发送数据
-                        NSArray* sendArray = [FaceModel getSendData:[ownModelArray.faceArray objectAtIndex:0]];
+
+                        NSArray* sendArray = [FaceModel getSendData:ownModelArray.faceArray];
                         SendData* send = [[SendData alloc] init];
                         [send writeDataWithArray:sendArray];
                         //保存到视频组
@@ -540,5 +551,18 @@ typedef NS_ENUM(NSInteger, BtnType) {
         [self.view addSubview:_getDataImageView];
     }
     return _getDataImageView;
+}
+
+- (UILabel*)errorMsgLabel {
+    if (!_errorMsgLabel) {
+        _errorMsgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, 60)];
+        _errorMsgLabel.textAlignment = NSTextAlignmentCenter;
+        _errorMsgLabel.backgroundColor = [UIColor whiteColor];
+        _errorMsgLabel.textColor = [UIColor redColor];
+        _errorMsgLabel.hidden = YES;
+        _errorMsgLabel.text = @"无法采集到您的数据，请对准屏幕";
+        [self.view addSubview:_errorMsgLabel];
+    }
+    return _errorMsgLabel;
 }
 @end
