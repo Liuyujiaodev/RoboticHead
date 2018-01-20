@@ -298,13 +298,16 @@ typedef NS_ENUM(NSInteger, BtnType) {
         dispatch_async(_drawFaceQueue, ^{
             if (modelArray) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
-                    MGFaceModelArray* showArray = [FaceModel getShowArray:modelArray];
+                    //拷贝出一份单门做显示，因为显示的要比实际采集的多，所以做了单门的处理
+                    MGFaceModelArray *showArray = [[MGFaceModelArray alloc] init];
+                    showArray.faceArray = [NSMutableArray arrayWithArray:modelArray.faceArray];
                     [weakSelf.renderer drawFaceLandMark:showArray];
 
+                    //存到数据的数据处理
                     MGFaceModelArray* ownModelArray = [FaceModel getOwnModelArrayFromArray:modelArray];
                     if (self.btnType == BtnTypeLocation) {
                         [self.locationArray addObject:ownModelArray];
-                    } else {
+                    } else if (self.btnType == BtnTypeGet){
                         //向蓝牙发送数据
                         NSArray* sendArray = [FaceModel getSendData:[ownModelArray.faceArray objectAtIndex:0]];
                         SendData* send = [[SendData alloc] init];
