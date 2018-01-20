@@ -247,7 +247,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)finishGetData {
     self.showTextLabel.text = @"采集完成";
-
+    self.getDataImageView.hidden = YES;
     [self.timerForGetData invalidate];
     self.btnType = BtnTypeNone;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"新建表情" message:@"输入表情名称" preferredStyle:UIAlertControllerStyleAlert];
@@ -384,8 +384,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 #pragma mark - video delegate 视频回来的处理
 -(void)MGCaptureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
-    
     @synchronized(self) {
+        //视频开始录制的时候，需要清除以前的buffer
         if (self.hasVideoFormatDescription == NO) {
             [self setupVideoPipelineWithInputFormatDescription:[self.videoManager formatDescription]];
         }
