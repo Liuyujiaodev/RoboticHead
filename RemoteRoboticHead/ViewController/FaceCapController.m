@@ -295,31 +295,28 @@ typedef NS_ENUM(NSInteger, BtnType) {
                 [self.markManager beginDetectionFrame];
                 
                 NSArray *tempArray = [self.markManager detectWithImageData:imageData];
-                if (tempArray.count > 0) {
-                    
-                    NSDate *date1, *date2, *date3;
-                    date1 = [NSDate date];
-                    date2 = [NSDate date];
-                    double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
-                    
-                    //这是获取到的人脸数据
-                    MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
-                    faceModelArray.getFaceInfo = NO;
-                    faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
-                    faceModelArray.timeUsed = timeUsed;
-                    faceModelArray.get3DInfo = NO;
-                    [faceModelArray setDetectRect:CGRectNull];
-                    
-                    for (int i = 0; i < faceModelArray.count; i ++) {
-                        MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
-                        [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
-                    }
-                    date3 = [NSDate date];
-                    double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
-                    faceModelArray.AttributeTimeUsed = timeUsed3D;
-                    
-                    [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
+                
+                NSDate *date1, *date2, *date3;
+                date1 = [NSDate date];
+                date2 = [NSDate date];
+                double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
+                
+                //这是获取到的人脸数据
+                MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
+                faceModelArray.getFaceInfo = NO;
+                faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
+                faceModelArray.timeUsed = timeUsed;
+                faceModelArray.get3DInfo = NO;
+                [faceModelArray setDetectRect:CGRectNull];
+                for (int i = 0; i < faceModelArray.count; i ++) {
+                    MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
+                    [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
                 }
+                date3 = [NSDate date];
+                double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
+                faceModelArray.AttributeTimeUsed = timeUsed3D;
+                
+                [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
                 [self.markManager endDetectionFrame];
 
             }
@@ -353,7 +350,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         [self.getArray addObject:sendArray];
                     }
                     //多显示几个点
-                    
+
                     if (!CGRectIsNull(modelArray.detectRect)) {
                         [weakSelf.renderer drawFaceWithRect:modelArray.detectRect];
                     }

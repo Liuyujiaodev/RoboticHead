@@ -95,7 +95,6 @@
 
 + (void)printMax:(NSArray*)pointArray {
     //测试最大值
-    NSMutableArray* array = [NSMutableArray array];
     CGPoint pointer = [pointArray[0] CGPointValue];
     CGFloat maxX = pointer.x;
     CGFloat maxY = pointer.y;
@@ -151,19 +150,19 @@
     
     NSMutableArray* sendData = [NSMutableArray array];
     //左眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:7 inMax:20 outMin:20 outMax:160 index:0]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:1 inMax:20 outMin:20 outMax:160 index:0]]];
     //右眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:7 inMax:20 outMin:20 outMax:160 index:1]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:1 inMax:20 outMin:20 outMax:160 index:1]]];
     //    Servos(name: "眼睛左右", currentAngle: array[2] as! UInt8, minA: 10, maxA: 170),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:120 inMax:200 outMin:10 outMax:170 index:3]]];
     //    Servos(name: "眼睛上下", currentAngle: array[3] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:10 inMax:20 outMin:10 outMax:170 index:33]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:5 inMax:20 outMin:10 outMax:170 index:33]]];
 
     //    Servos(name: "左上眼皮", currentAngle: array[4] as! UInt8, minA: 20, maxA: 160),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:5] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:5]]];
     
     //Servos(name: "右上眼皮", currentAngle: array[5] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:10] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:10]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:10] CGPointValue].y inMin:0 inMax:15 outMin:20 outMax:160 index:10]]];
     
     // Servos(name: "左下眼皮", currentAngle: array[6] as! UInt8, minA: 20, maxA: 160),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:6] CGPointValue].y inMin:0 inMax:28 outMin:20 outMax:160 index:6]]];
