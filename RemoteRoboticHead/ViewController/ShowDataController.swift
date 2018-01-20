@@ -60,30 +60,22 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
             
         }
     }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.delete
-    }
-    
-    //在这里修改删除按钮的文字
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "删除"
-    }
-    
-    //点击删除按钮的响应方法，在这里处理删除的逻辑
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        let filePath : String = dataSource.object(at: indexPath.row) as! String
 
-        if editingStyle == UITableViewCellEditingStyle.delete {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .normal, title: "删除", handler: { (_, indexPath)
+            in
+            
+            let filePath : String = self.dataSource.object(at: indexPath.row) as! String
             let fileUtil = FileUtil.init()
             //删除文件
             fileUtil.removeFile(fileName: filePath)
             //删除datasource重新加载tableview
-            dataSource.remove(filePath)
+            self.dataSource.remove(filePath)
             self.tableView.reloadData()
-        }
+        })
+        delete.backgroundColor = UIColor.red
+        return [delete]
     }
-    
     @IBAction func backBtnAction(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }

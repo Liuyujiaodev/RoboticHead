@@ -28,25 +28,35 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cRt-Gp-dFu">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="obQ-Mq-m4D">
                                 <rect key="frame" x="0.0" y="80" width="375" height="527"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="TDS-RS-f8L">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TDS-RS-f8L" id="GVe-nK-e89">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="zBI-vv-4KX" id="E6G-zB-7es"/>
-                                    <outlet property="delegate" destination="zBI-vv-4KX" id="enl-jy-Kqp"/>
-                                </connections>
-                            </tableView>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cRt-Gp-dFu">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="527"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="TDS-RS-f8L">
+                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TDS-RS-f8L" id="GVe-nK-e89">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="zBI-vv-4KX" id="E6G-zB-7es"/>
+                                            <outlet property="delegate" destination="zBI-vv-4KX" id="enl-jy-Kqp"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="cRt-Gp-dFu" firstAttribute="top" secondItem="obQ-Mq-m4D" secondAttribute="top" id="RgU-wV-qBa"/>
+                                    <constraint firstAttribute="trailing" secondItem="cRt-Gp-dFu" secondAttribute="trailing" id="XDW-m5-HAV"/>
+                                    <constraint firstItem="cRt-Gp-dFu" firstAttribute="leading" secondItem="obQ-Mq-m4D" secondAttribute="leading" id="m8s-ly-Tpf"/>
+                                    <constraint firstAttribute="bottom" secondItem="cRt-Gp-dFu" secondAttribute="bottom" id="tKX-sG-nU7"/>
+                                </constraints>
+                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="071-xL-lIF">
                                 <rect key="frame" x="0.0" y="628" width="375" height="39"/>
                                 <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -77,13 +87,16 @@
                         <constraints>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="1Fu-0G-SR7"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="B4B-Fh-D9I"/>
+                            <constraint firstItem="JZ5-G0-wHn" firstAttribute="top" secondItem="obQ-Mq-m4D" secondAttribute="bottom" id="BVD-TK-yLn"/>
                             <constraint firstItem="PId-kS-dhn" firstAttribute="trailing" secondItem="8dC-pE-a8b" secondAttribute="trailing" id="CW3-dl-NWX"/>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="EMs-wF-8Do"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="FIa-ox-6KC"/>
-                            <constraint firstItem="071-xL-lIF" firstAttribute="top" secondItem="JZ5-G0-wHn" secondAttribute="bottom" constant="40" id="Gpc-En-YVQ"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="HGP-ZI-giH"/>
+                            <constraint firstItem="obQ-Mq-m4D" firstAttribute="trailing" secondItem="JZ5-G0-wHn" secondAttribute="trailing" id="KR0-ed-dnb"/>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="OZF-fj-Vvj"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="top" secondItem="PId-kS-dhn" secondAttribute="top" constant="-20" id="U9u-iC-kfB"/>
+                            <constraint firstItem="obQ-Mq-m4D" firstAttribute="top" secondItem="8dC-pE-a8b" secondAttribute="bottom" id="ean-Qn-FaO"/>
+                            <constraint firstItem="obQ-Mq-m4D" firstAttribute="leading" secondItem="JZ5-G0-wHn" secondAttribute="leading" id="o24-c4-ROi"/>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="p5E-Al-RJW"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="top" secondItem="JZ5-G0-wHn" secondAttribute="bottom" id="rKQ-VT-QoX"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="bottom" secondItem="PId-kS-dhn" secondAttribute="bottom" id="xdH-bl-mlH"/>
