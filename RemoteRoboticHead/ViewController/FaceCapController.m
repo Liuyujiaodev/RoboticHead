@@ -161,7 +161,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 //人脸头像
 - (void)addImageView {
     self.faceImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
-    self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
+    self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     [self.view addSubview:self.faceImgView];
 }
 
@@ -201,6 +201,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 - (void)locationBtnAction:(UIButton*)btn {
     btn.selected = !btn.selected;
     if (btn.selected) {
+        self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
         self.showTextLabel.hidden = NO;
         self.showTextLabel.text = @"开始定位";
         self.btnType = BtnTypeLocation;
@@ -225,6 +226,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     }
     btn.selected = !btn.selected;
     if (btn.selected) {
+        self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
         [self.getArray removeAllObjects];
         //显示左上角采集的图标
         self.getDataImageView.hidden = NO;
@@ -259,6 +261,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)finishGetData {
+    self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     self.showTextLabel.text = @"采集完成";
     self.getDataImageView.hidden = YES;
     [self.timerForGetData invalidate];
