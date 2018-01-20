@@ -332,10 +332,12 @@ typedef NS_ENUM(NSInteger, BtnType) {
         dispatch_async(_drawFaceQueue, ^{
             if (modelArray) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
+                    
                     //拷贝出一份单门做显示，因为显示的要比实际采集的多，所以做了单门的处理
                     MGFaceModelArray *showArray = [[MGFaceModelArray alloc] init];
                     showArray.faceArray = [NSMutableArray arrayWithArray:modelArray.faceArray];
-                    [weakSelf.renderer drawFaceLandMark:showArray];
+                    //显示脸上的点
+                    [weakSelf.renderer drawFaceLandMark:showArray];//
 
                     //存到数据的数据处理
                     MGFaceModelArray* ownModelArray = [FaceModel getOwnModelArrayFromArray:modelArray];
