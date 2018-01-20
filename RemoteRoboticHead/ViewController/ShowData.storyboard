@@ -47,16 +47,6 @@
                                     <outlet property="delegate" destination="zBI-vv-4KX" id="enl-jy-Kqp"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZ5-G0-wHn">
-                                <rect key="frame" x="0.0" y="567" width="375" height="21"/>
-                                <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="kjf-g3-4M6"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="071-xL-lIF">
                                 <rect key="frame" x="0.0" y="628" width="375" height="39"/>
                                 <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -70,18 +60,35 @@
                                     <action selector="backBtnAction:" destination="zBI-vv-4KX" eventType="touchUpInside" id="TAZ-DT-Chu"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZ5-G0-wHn">
+                                <rect key="frame" x="0.0" y="607" width="375" height="21"/>
+                                <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="Uad-Zw-5fw"/>
+                                    <constraint firstAttribute="height" constant="21" id="kjf-g3-4M6"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="21" id="liD-Xu-Co5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="JZ5-G0-wHn" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="1Fu-0G-SR7"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="B4B-Fh-D9I"/>
                             <constraint firstItem="PId-kS-dhn" firstAttribute="trailing" secondItem="8dC-pE-a8b" secondAttribute="trailing" id="CW3-dl-NWX"/>
+                            <constraint firstItem="JZ5-G0-wHn" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="EMs-wF-8Do"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="FIa-ox-6KC"/>
+                            <constraint firstItem="071-xL-lIF" firstAttribute="top" secondItem="JZ5-G0-wHn" secondAttribute="bottom" constant="40" id="Gpc-En-YVQ"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="HGP-ZI-giH"/>
+                            <constraint firstItem="JZ5-G0-wHn" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="OZF-fj-Vvj"/>
                             <constraint firstItem="8dC-pE-a8b" firstAttribute="top" secondItem="PId-kS-dhn" secondAttribute="top" constant="-20" id="U9u-iC-kfB"/>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="p5E-Al-RJW"/>
+                            <constraint firstItem="071-xL-lIF" firstAttribute="top" secondItem="JZ5-G0-wHn" secondAttribute="bottom" id="rKQ-VT-QoX"/>
                             <constraint firstItem="071-xL-lIF" firstAttribute="bottom" secondItem="PId-kS-dhn" secondAttribute="bottom" id="xdH-bl-mlH"/>
+                            <constraint firstItem="JZ5-G0-wHn" firstAttribute="trailing" secondItem="PId-kS-dhn" secondAttribute="trailing" id="xlU-XU-7dR"/>
                             <constraint firstItem="JZ5-G0-wHn" firstAttribute="leading" secondItem="PId-kS-dhn" secondAttribute="leading" id="z19-VD-SRC"/>
-                            <constraint firstItem="071-xL-lIF" firstAttribute="top" secondItem="JZ5-G0-wHn" secondAttribute="bottom" constant="40" id="z7r-xE-wug"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PId-kS-dhn"/>
                     </view>

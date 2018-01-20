@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [locationBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
     [locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [locationBtn setTitle:@"定位" forState:UIControlStateNormal];
-    [locationBtn setTitle:@"停止定位" forState:UIControlStateSelected];
+    [locationBtn setTitle:@"确定" forState:UIControlStateSelected];
     [self.view addSubview:locationBtn];
     
     UIButton* getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
