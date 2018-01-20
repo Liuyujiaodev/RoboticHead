@@ -86,6 +86,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+
     //首先要检测是否开启相机权限，然后有权限则进行face++授权，授权成功后做初始化
     [self startCheck];
     //创建UI
@@ -209,7 +211,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
         [self.getArray removeAllObjects];
         [self.videoManager startRecording];
         [self setUpCameraLayer];
-        
+        self.showTextLabel.text = @"正在采集";
         self.btnType = BtnTypeGet;
         [self.timerForGetData invalidate];
         self.time = MAX_GET_TIME;
@@ -226,12 +228,15 @@ typedef NS_ENUM(NSInteger, BtnType) {
         }];
         [[NSRunLoop mainRunLoop] addTimer:self.timerForGetData forMode:NSRunLoopCommonModes];
     } else {
+        
         [self finishGetData];
     }
  
 }
 
 - (void)finishGetData {
+    self.showTextLabel.text = @"采集完成";
+
     [self.timerForGetData invalidate];
     self.btnType = BtnTypeNone;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"新建表情" message:@"输入表情名称" preferredStyle:UIAlertControllerStyleAlert];
