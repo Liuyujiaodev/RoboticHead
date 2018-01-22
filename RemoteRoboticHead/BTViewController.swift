@@ -44,7 +44,7 @@ class BTViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         //停止按键功能
         self.linbtn.isEnabled=false
         self.goControlBtn.isEnabled=false
-        self.goFaceCapBtn.isEnabled=true
+        self.goFaceCapBtn.isEnabled=false
         self.goControlBtn.backgroundColor=UIColor.lightGray
         self.goFaceCapBtn.backgroundColor=UIColor.lightGray
         self.linbtn.backgroundColor=UIColor.lightGray

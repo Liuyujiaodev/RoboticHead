@@ -16,5 +16,6 @@
 
 #import "test.h"
 #import "FaceCapController.h"
+#import "MGFaceLicenseHandle.h"
 
 #endif /* RemoteRoboticHead_Brdging_Header_h */

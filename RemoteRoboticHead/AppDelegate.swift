@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.getAuth()
         // Override point for customization after application launch.
         return true
     }
@@ -41,6 +43,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func getAuth() {
 
+        let authStauts = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        
+        if authStauts == AVAuthorizationStatus.notDetermined {
+            AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted:Bool) -> Void in
+                if (granted == false) {
+                    print(granted)
+                }
+                else {
+                    self.authFace()
+                }
+            })
+        }
+    }
+    func authFace() {
+        let needLicense = MGFaceLicenseHandle.getNeedNetLicense()
+        if needLicense {
+            MGFaceLicenseHandle.license(forNetwokrFinish: { (license, sdkDate) in
+                if (license) {
+                    
+                }
+            })
+        }
+    }
+    
 }
 
