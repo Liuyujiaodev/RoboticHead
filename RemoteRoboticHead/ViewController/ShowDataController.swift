@@ -40,7 +40,6 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView!.deselectRow(at: indexPath, animated: true)
         showText.text = "开始传输"
 
         let fileUtil = FileUtil.init()
@@ -56,6 +55,7 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
             }
             DispatchQueue.main.async {
                 self.showText.text = "传输完成"
+                self.tableView!.deselectRow(at: indexPath, animated: true)
             }
             
         }
