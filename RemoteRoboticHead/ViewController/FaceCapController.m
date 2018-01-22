@@ -360,8 +360,10 @@ typedef NS_ENUM(NSInteger, BtnType) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
                     
                     //拷贝出一份单门做显示，因为显示的要比实际采集的多，所以做了单门的处理
-                    MGFaceModelArray *showArray = [[MGFaceModelArray alloc] init];
-                    showArray.faceArray = [NSMutableArray arrayWithArray:modelArray.faceArray];
+                    MGFaceModelArray *showArrayModel = [[MGFaceModelArray alloc] init];
+                    showArrayModel.faceArray = [NSMutableArray arrayWithArray:modelArray.faceArray];
+                    MGFaceModelArray* showArray = [FaceModel getShowArray:showArrayModel];
+
                     //显示脸上的点
                     [weakSelf.renderer drawFaceLandMark:showArray];//
 
