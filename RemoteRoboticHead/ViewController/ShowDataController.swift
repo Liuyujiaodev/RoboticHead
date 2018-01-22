@@ -41,7 +41,7 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView!.deselectRow(at: indexPath, animated: true)
-        showText.text = "正在发送数据"
+        showText.text = "开始传输"
 
         let fileUtil = FileUtil.init()
         let filePath : String = dataSource.object(at: indexPath.row) as! String
@@ -55,7 +55,7 @@ class ShowDataController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 Thread.sleep(forTimeInterval: 0.1)
             }
             DispatchQueue.main.async {
-                self.showText.text = "发送完成"
+                self.showText.text = "传输完成"
             }
             
         }
