@@ -151,7 +151,7 @@
     //右眉
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:1 inMax:100 outMin:20 outMax:160 index:1]]];
     //    Servos(name: "眼睛左右", currentAngle: array[2] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:110 inMax:200 outMin:10 outMax:170 index:3]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:80 inMax:200 outMin:10 outMax:170 index:3]]];
     //    Servos(name: "眼睛上下", currentAngle: array[3] as! UInt8, minA: 10, maxA: 170),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:0 inMax:20 outMin:10 outMax:170 index:33]]];
     //    Servos(name: "左上眼皮", currentAngle: array[4] as! UInt8, minA: 20, maxA: 160),
@@ -179,14 +179,14 @@
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:3 inMax:80 outMin:20 outMax:160 index:15]]];
 
     //    Servos(name: "嘴部张合", currentAngle: array[12] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].x inMin:2 inMax:30 outMin:20 outMax:160 index:1616]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].x inMin:0 inMax:30 outMin:20 outMax:160 index:1616]]];
 
     
     //Servos(name: "头部旋转", currentAngle: array[13] as! UInt8, minA: 40, maxA: 140)
-    [sendData addObject:[NSNumber numberWithInt:[self map:faceInfo.pitch inMin:0 inMax:1 outMin:40 outMax:140 index:100]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:faceInfo.pitch inMin:-1 inMax:1 outMin:40 outMax:140 index:100]]];
 
      //Servos(name: "头部前后", currentAngle: array[14] as! UInt8, minA: 40, maxA: 140),
-     [sendData addObject:[NSNumber numberWithInt:[self map:faceInfo.yaw inMin:0 inMax:2 outMin:40 outMax:140 index:101]]];
+     [sendData addObject:[NSNumber numberWithInt:[self map:faceInfo.yaw inMin:-1 inMax:1 outMin:40 outMax:140 index:101]]];
 
     //    Servos(name: "头部左右", currentAngle: array[15] as! UInt8, minA: 40, maxA: 140),
     [sendData addObject:[NSNumber numberWithInt:[self map:faceInfo.roll inMin:0 inMax:2 outMin:40 outMax:140 index:102]]];
