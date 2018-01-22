@@ -45,12 +45,13 @@
         for (MGFaceInfo* faceInfo in modelArray.faceArray) {
             NSArray* yLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:12] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:13] CGPointValue]];
             NSArray* xLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:3] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:9] CGPointValue]];
+
             for (NSString* indexString in Face_Array) {
                 NSInteger index = [Face_Array indexOfObject:indexString];
                 CGPoint point = [[faceInfo.points objectAtIndex:index] CGPointValue];
                 
                 CGPoint relativeCurrentPoint = [self getRelativePoint:point yLine:yLine xLine:xLine];
-                
+
                 //已经存在改点的数组，则放到该点数组里，还没有则初始化一个数组来存放
                 if (allPointArray.count > index) {
                     [[allPointArray objectAtIndex:index] addObject:[NSValue valueWithCGPoint:relativeCurrentPoint]];
@@ -137,7 +138,7 @@
     MGFaceInfo* faceInfo = [faceArray objectAtIndex:0];
     //
     NSArray* yLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:12] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:13] CGPointValue]];
-    NSArray* xLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:1] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:11] CGPointValue]];
+    NSArray* xLine = [self getYLineArrayWithPoint:[[faceInfo.points objectAtIndex:3] CGPointValue] andPoint:[[faceInfo.points objectAtIndex:9] CGPointValue]];
     for (int i = 0; i <faceInfo.points.count; i ++) {
         CGPoint currentPoint = [faceInfo.points[i] CGPointValue];
         CGPoint relativeCurrentPoint = [self getRelativePoint:currentPoint yLine:yLine xLine:xLine];
@@ -146,14 +147,13 @@
     
     NSMutableArray* sendData = [NSMutableArray array];
     //左眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:1 inMax:20 outMin:20 outMax:160 index:0]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:1 inMax:100 outMin:20 outMax:160 index:0]]];
     //右眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:1 inMax:20 outMin:20 outMax:160 index:1]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:1 inMax:100 outMin:20 outMax:160 index:1]]];
     //    Servos(name: "眼睛左右", currentAngle: array[2] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:120 inMax:200 outMin:10 outMax:170 index:3]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:110 inMax:200 outMin:10 outMax:170 index:3]]];
     //    Servos(name: "眼睛上下", currentAngle: array[3] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:5 inMax:20 outMin:10 outMax:170 index:33]]];
-
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:0 inMax:20 outMin:10 outMax:170 index:33]]];
     //    Servos(name: "左上眼皮", currentAngle: array[4] as! UInt8, minA: 20, maxA: 160),
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:5] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:5]]];
     
@@ -167,19 +167,19 @@
     [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:11] CGPointValue].y inMin:0 inMax:28 outMin:20 outMax:160 index:11]]];
     
     //Servos(name: "左唇上下", currentAngle: array[8] as! UInt8, minA: 20, maxA: 160)
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:14]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].y inMin:3 inMax:230 outMin:20 outMax:160 index:14]]];
     
     //Servos(name: "右唇上下", currentAngle: array[9] as! UInt8, minA: 20, maxA: 160)
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:16]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:3 inMax:290 outMin:20 outMax:160 index:16]]];
     
     //    Servos(name: "左唇前后", currentAngle: array[10] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:3 inMax:30 outMin:20 outMax:160 index:1414]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:3 inMax:90 outMin:20 outMax:160 index:1414]]];
     
     //    Servos(name: "右唇前后", currentAngle: array[11] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:3 inMax:30 outMin:20 outMax:160 index:15]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:3 inMax:80 outMin:20 outMax:160 index:15]]];
 
     //    Servos(name: "嘴部张合", currentAngle: array[12] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].x inMin:6 inMax:30 outMin:20 outMax:160 index:1616]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].x inMin:2 inMax:30 outMin:20 outMax:160 index:1616]]];
 
     
     //Servos(name: "头部旋转", currentAngle: array[13] as! UInt8, minA: 40, maxA: 140)
