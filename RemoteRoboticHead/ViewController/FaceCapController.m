@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 //创建人脸头像
 - (void)addImageView {
-    self.faceImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
+    self.faceImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 30, APPViewWidth, APPViewHeight-30-87)];
     self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     [self.view addSubview:self.faceImgView];
 }
@@ -674,7 +674,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (UIImageView*)getDataImageView {
     if (!_getDataImageView) {
-        _getDataImageView = [[UIImageView alloc] initWithFrame:CGRectMake(40, 80, 30, 30)];
+        _getDataImageView = [[UIImageView alloc] initWithFrame:CGRectMake(18, 86, 40, 40)];
         _getDataImageView.image = [UIImage imageNamed:@"rec"];
         _getDataImageView.hidden = YES;
         [self.view addSubview:_getDataImageView];
