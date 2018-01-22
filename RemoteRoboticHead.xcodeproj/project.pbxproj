@@ -37,6 +37,7 @@
 		09ABCDB32012ECCD000999D6 /* ShowData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09ABCDB22012ECCD000999D6 /* ShowData.storyboard */; };
 		09ABCDB52013191B000999D6 /* ShowDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDB42013191B000999D6 /* ShowDataController.swift */; };
 		09B23557200EFDCB005959DD /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B23556200EFDCB005959DD /* Util.m */; };
+		09D6BB932015B923005CF586 /* readme in Resources */ = {isa = PBXBuildFile; fileRef = 09D6BB922015B923005CF586 /* readme */; };
 		5F3BD80E200912E100110755 /* FaceCapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80D200912E100110755 /* FaceCapViewController.swift */; };
 		5F3BD810200913E000110755 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80F200913E000110755 /* ControlViewController.swift */; };
 		5F3BD81920099EF500110755 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD81820099EF500110755 /* test.mm */; };
@@ -114,6 +115,7 @@
 		09ABCDB42013191B000999D6 /* ShowDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDataController.swift; sourceTree = "<group>"; };
 		09B23555200EFDCB005959DD /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		09B23556200EFDCB005959DD /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		09D6BB922015B923005CF586 /* readme */ = {isa = PBXFileReference; lastKnownFileType = text; path = readme; sourceTree = "<group>"; };
 		5F3BD80D200912E100110755 /* FaceCapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCapViewController.swift; sourceTree = "<group>"; };
 		5F3BD80F200913E000110755 /* ControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlViewController.swift; sourceTree = "<group>"; };
 		5F3BD812200921D700110755 /* RemoteRoboticHead-Brdging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemoteRoboticHead-Brdging-Header.h"; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				5F3BD83D2009DACB00110755 /* CSTableViewCell.swift */,
 				5F3BD83F2009DBF600110755 /* ServosData.swift */,
 				5F3BD843200B8B5100110755 /* ActionListViewController.swift */,
+				09D6BB922015B923005CF586 /* readme */,
 			);
 			path = RemoteRoboticHead;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09D6BB932015B923005CF586 /* readme in Resources */,
 				09ABCDB32012ECCD000999D6 /* ShowData.storyboard in Resources */,
 				09609D9B200C4ABA0051AE10 /* megviifacepp_0_5_2_model in Resources */,
 				09837903200F394C001FF8DB /* VideoFrag.glsl in Resources */,

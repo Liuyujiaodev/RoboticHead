@@ -1,0 +1,13 @@
+一、文件功能介绍
+    FaceCapController动态捕捉的ViewController
+    FaceModel对数据进行处理
+    SendData.swift 主要是发送数据给蓝牙
+    WriteToFile.swift 对本地蓝牙数据的存储
+    ShowDataController.swift 数据页面
+二、face++初始化说明
+
+三、动态修改的宏
+    1：MAX_GET_TIME 采集的描述，可以直接搜索这个宏修改秒数，现在默认5秒
+    2：
+
+

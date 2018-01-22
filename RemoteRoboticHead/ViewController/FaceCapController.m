@@ -19,6 +19,7 @@
 #import "FaceModel.h"
 #import "RemoteRoboticHead-Swift.h"
 
+//拖动按钮的限制
 typedef struct {
     CGFloat minW;
     CGFloat maxW;
@@ -34,7 +35,7 @@ typedef struct {
 
 #define RETAINED_BUFFER_COUNT 6
 
-#define MAX_GET_TIME  5
+#define MAX_GET_TIME  5 //采集多少秒
 
 typedef NS_ENUM(NSInteger, BtnType) {
     BtnTypeNone = 0,//不做数据采集工作，只显示摄像头内容
@@ -46,39 +47,44 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 @interface FaceCapController () <MGVideoDelegate>
 {
-    dispatch_queue_t _detectImageQueue;
-    dispatch_queue_t _drawFaceQueue;
-    LimitArea limitRect;
+    dispatch_queue_t _detectImageQueue;//检测人脸的线程
+    dispatch_queue_t _drawFaceQueue;//绘制人脸的线程
+    LimitArea limitRect;//拖动的限制范围
 }
 
 @property (nonatomic, strong) MGOpenGLView *previewView;//预览头像的view
 
+//-----------face++相关-------
 @property (nonatomic, assign) BOOL hasVideoFormatDescription;//是否为render进行了video的设置
 @property (nonatomic, strong) MGOpenGLRenderer *renderer; //绘制头像上的点
-
 @property (nonatomic, strong) MGFacepp *markManager; //face++处理数据
-
 @property (nonatomic, strong) MGVideoManager *videoManager; //录制视频
+@property (nonatomic, strong) MGFaceInfo* standardFaceInfo;//区分是采集还是定位
 
+//-------UI相关-------
+@property (nonatomic, strong) UILabel* showTextLabel;//底部的状态条
+@property (nonatomic, strong) UIImageView* faceImgView;//人脸框的图片
+@property (nonatomic, strong) UIImageView* getDataImageView;//采集时候左上角的摄像机的小图标
+@property (nonatomic, strong) UILabel* errorMsgLabel;//获取不到数据的时候显示
+
+//--------数据相关-------
+@property (nonatomic, assign) BtnType btnType;//区分是采集还是定位
 @property (nonatomic, strong) NSMutableArray* locationArray;//定位的数组
 @property (nonatomic, strong) NSMutableArray* getArray;//采集的数组
+@property (nonatomic, assign) CGFloat pointRelativeX;//肩膀左右
+@property (nonatomic, assign) CGFloat pointRelativeY;//肩膀上下
 
-@property (nonatomic, assign) BtnType btnType;//区分是采集还是定位
-@property (nonatomic, strong) UIButton* selectBtn;//区分是采集还是定位
-@property (nonatomic, strong) MGFaceInfo* standardFaceInfo;//区分是采集还是定位
+//------采集时间倒计时-----
 @property (nonatomic, strong) NSTimer* timerForGetData;//采集数据倒计时
 @property (nonatomic, assign) NSInteger time;//区分是采集还是定位
+
+//-------拖动的圆点相关-----
+@property (nonatomic, strong) UIView* bkArea;//拖动的外框
+@property (nonatomic, strong) UIView* mvPoint;//拖动的圆点
+
+//--------处理器-------
 @property (nonatomic, strong) FileUtil* fileUtil;//文件操作的处理器
-@property (nonatomic, strong) UILabel* showTextLabel;//文件操作的处理器
-
-@property (nonatomic, strong) UIImageView* faceImgView;//人脸的iamgeView
-@property (nonatomic, strong) UIImageView* getDataImageView;//人脸的iamgeView
-@property (nonatomic, strong) UILabel* errorMsgLabel;//获取不到数据的时候显示
-@property (nonatomic, strong) UIView* bkArea;
-@property (nonatomic, strong) UIView* mvPoint;
-@property (nonatomic, assign) CGFloat pointRelativeX;
-@property (nonatomic, assign) CGFloat pointRelativeY;
-
+@property (nonatomic, strong) SendData* sendUtil;//发送蓝牙数据处理器
 @end
 
 
@@ -86,36 +92,28 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 #pragma mark - 生命周期
 
--(void)dealloc{
-    self.previewView = nil;
-    self.renderer = nil;
-}
-
+//进入页面后初始化一些需要的值
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.pointRelativeX = 90;
-        self.pointRelativeY = 90;
         self.locationArray = [NSMutableArray array];
         self.getArray = [NSMutableArray array];
         self.btnType = BtnTypeNone;//进来后不采集数据
+        self.pointRelativeX = 90;
+        self.pointRelativeY = 90;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //页面保持常亮
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-
+    
     //首先要检测是否开启相机权限，然后有权限则进行face++授权，授权成功后做初始化
     [self startCheck];
     //创建UI
     [self creatView];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -128,18 +126,23 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    //页面消失关闭摄像头
     [self.videoManager stopRunning];
 }
 
 #pragma mark -UI层
 - (void)creatView{
+    //创建顶部的titleView
     [self addTopView];
+    //创建人脸头像
     [self addImageView];
+    //创建底部四个按钮
     [self addBtnView];
+    //创建拖动的小圆点和外边的框
     [self createDragView];
 }
 
-//加载图层预览
+//加载图层预览---显示摄像头的数据
 - (void)setUpCameraLayer
 {
     if (!self.previewView) {
@@ -151,16 +154,16 @@ typedef NS_ENUM(NSInteger, BtnType) {
         CGAffineTransform transform =  [self.videoManager transformFromVideoBufferOrientationToOrientation:(AVCaptureVideoOrientation)currentInterfaceOrientation
                                                                                          withAutoMirroring:YES];
         self.previewView.transform = transform;
-        
         [self.view insertSubview:self.previewView atIndex:0];
+        
         CGRect bounds = CGRectZero;
         bounds.size = [self.view convertRect:self.view.bounds toView:self.previewView].size;
         self.previewView.bounds = bounds;
         self.previewView.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0);
-        
     }
 }
 
+//创建顶部的titleView
 - (void)addTopView {
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, 54)];
     view.backgroundColor = RGBColor(253, 146, 38);
@@ -175,30 +178,34 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [view addSubview:topLabel];
 }
 
-//人脸头像
+//创建人脸头像
 - (void)addImageView {
     self.faceImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, APPViewHeight)];
     self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     [self.view addSubview:self.faceImgView];
 }
 
+//创建底部四个按钮
 - (void)addBtnView {
+    //定位按钮
     UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60, APPViewWidth/4, 60)];
     [locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [locationBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
+    [locationBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
     [locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [locationBtn setTitle:@"定位" forState:UIControlStateNormal];
     [locationBtn setTitle:@"确定" forState:UIControlStateSelected];
     [self.view addSubview:locationBtn];
     
+    //采集按钮
     UIButton* getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
     [getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [getBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
+    [getBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
     [getBtn addTarget:self action:@selector(getBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [getBtn setTitle:@"采集" forState:UIControlStateNormal];
     [getBtn setTitle:@"停止" forState:UIControlStateSelected];
     [self.view addSubview:getBtn];
     
+    //数据按钮
     UIButton* palyBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*2, APPViewHeight - 60, APPViewWidth/4, 60)];
     [palyBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
     [palyBtn setBackgroundColor:RGBColor(30, 173, 251) forState:UIControlStateSelected];
@@ -206,6 +213,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [palyBtn setTitle:@"数据" forState:UIControlStateNormal];
     [self.view addSubview:palyBtn];
     
+    //返回按钮
     UIButton* backBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*3, APPViewHeight - 60, APPViewWidth/4, 60)];
     [backBtn setBackgroundColor:RGBColor(107, 107, 107) forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -213,6 +221,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self.view addSubview:backBtn];
 }
 
+//创建拖动的小圆点和外边的框
 - (void)createDragView {
     CGFloat height = APPViewHeight - 54 - 60 - 27;//目前背景高度
     //创建拖拽框
@@ -244,21 +253,23 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 #pragma mark - btn action
 
+//定位按钮事件
 - (void)locationBtnAction:(UIButton*)btn {
     btn.selected = !btn.selected;
     if (btn.selected) {
+        //按下定位按钮，显示红色框，状态显示开始定位，然后设置btnType,来将数据存到locationArray里，清除上次定位存放的数据
         self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
-        self.showTextLabel.hidden = NO;
         self.showTextLabel.text = @"开始定位";
         self.btnType = BtnTypeLocation;
         [self.locationArray removeAllObjects];
     } else {
+        //设置btntype为BtnTypeNone，摄像头数据将不存到locationArray，状态显示定位结束，判断采集回来的数据是否可用，如果可用，计算定位里数据的平均值，放到locationArray，否则弹窗提示定位失败
         self.btnType = BtnTypeNone;
         self.showTextLabel.text = @"定位结束";
+        self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
         if (self.locationArray.count > 0) {
             self.standardFaceInfo = [FaceModel getCenterPoint:self.locationArray];
-            self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
-            AudioServicesPlaySystemSound(1012);
+            AudioServicesPlaySystemSound(1012);//播放系统声音
         } else {
             [self alertErrorMsg:@"定位失败" msg:@"请重新定位"];
         }
@@ -266,29 +277,30 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)getBtnAction:(UIButton*)btn {
+    //没有可用的定位信息，提示用户先进行定位
     if (!self.standardFaceInfo) {
         [self alertErrorMsg:@"请先进行定位" msg:@"点击定位按钮进行定位"];
         return;
     }
     btn.selected = !btn.selected;
     if (btn.selected) {
+        //人脸框变红，显示左上角采集的图标，状态提示正在采集，btnType设为BtnTypeGet，将视频采集到的数据存到getArray，清除以前存放的数据
         self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
-        [self.getArray removeAllObjects];
-        //显示左上角采集的图标
         self.getDataImageView.hidden = NO;
-        //提示正在采集的label
         self.showTextLabel.text = @"正在采集";
-        //设置数据收集的状态
         self.btnType = BtnTypeGet;
-        
+        [self.getArray removeAllObjects];
+
         //开启时间倒计时
         [self.timerForGetData invalidate];
         self.time = MAX_GET_TIME;
-        //修改按钮为几秒后停止
+        
+        //修改按钮为几秒后停止，因为时间timer里会一秒后执行，所以需要先执行一次title修改
         [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
         
         //启动倒计时，修改按钮的title，时间到时停止
         self.timerForGetData = [NSTimer timerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            //没到时间，值修改btntitle，时间到后结束采集
             if (self.time > 0) {
                 [btn setTitle:[NSString stringWithFormat:@"%ld秒停止", (long)self.time] forState:UIControlStateSelected];
             } else {
@@ -306,17 +318,22 @@ typedef NS_ENUM(NSInteger, BtnType) {
  
 }
 
+//采集完成的方法
 - (void)finishGetData {
+    //人脸框变蓝，状态显示采集完成，隐藏左上角摄像机图标，倒计时结束，并且停止收集数据
     self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     self.showTextLabel.text = @"采集完成";
     self.getDataImageView.hidden = YES;
     [self.timerForGetData invalidate];
     self.btnType = BtnTypeNone;
+    
+    //弹出新建表情的窗口
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"新建表情" message:@"输入表情名称" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
     }];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *textField = alertController.textFields.firstObject;
+        //保存到本地文件里
         [self.fileUtil saveFileWithFileName:textField.text data:self.getArray];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
@@ -325,18 +342,19 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//跳转到数据页面
 - (void)palyBtnAction:(UIButton*)btn {
     UIStoryboard *UpgradeHardware = [UIStoryboard storyboardWithName:@"ShowData" bundle:nil];
-    
     UIViewController *showDataVC = [UpgradeHardware instantiateViewControllerWithIdentifier:@"ShowDataController"];//跳转VC的名称
-                                 
     [self presentViewController:showDataVC animated:YES completion:nil];
 }
 
+//返回按钮事件
 - (void)backBtnAction {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+//拖动小圆点事件
 - (void)pointDrag:(UIPanGestureRecognizer*)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.showTextLabel.text = @"拖动控制肩膀";
@@ -380,22 +398,13 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)checkAngleOnPage {
-    
    self.pointRelativeX = [FaceModel map:self.mvPoint.center.x inMin:CGRectGetMinX(self.bkArea.frame) inMax:CGRectGetMaxX(self.bkArea.frame) outMin:40 outMax:140 index:0];//前后
     self.pointRelativeY = [FaceModel map:self.mvPoint.center.y inMin:CGRectGetMinY(self.bkArea.frame) inMax:CGRectGetMaxY(self.bkArea.frame) outMin:40 outMax:140 index:0];//上下
-
-    
-//    outdatas.append(UInt8(ServoOneAccount + currentSelectServo[i]))
-//    if(i%2 == 0){
-//        outdatas.append(map(x: (mvPoint1?.center.x)!, in_min: (bkArea1?.frame.minX)!, in_max: (bkArea1?.frame.maxX)!, out_min: CGFloat(servosData[currentSelectServo[i]].minA), out_max: CGFloat(servosData[currentSelectServo[i]].maxA)))
-//    }else{
-//        outdatas.append(map(x: (mvPoint1?.center.y)!, in_min: (bkArea1?.frame.minY)!, in_max: (bkArea1?.frame.maxY)!, out_min: CGFloat(servosData[currentSelectServo[i]].minA), out_max: CGFl
 }
 
 #pragma mark - 视频处理
 //处理视频数据并显示
 - (void)rotateAndDetectSampleBuffer:(CMSampleBufferRef)sampleBuffer{
-    
     if (self.markManager.status != MGMarkWorking) {
         
         //拷贝一份到内存做处理
@@ -404,44 +413,35 @@ typedef NS_ENUM(NSInteger, BtnType) {
         
         /* 进入检测人脸专用线程 */
         dispatch_async(_detectImageQueue, ^{
-            
             @autoreleasepool {
-                
+                //拿到摄像头的image数据
                 MGImageData *imageData = [[MGImageData alloc] initWithSampleBuffer:detectSampleBufferRef];
                 
                 /** 开启检测新的一帧，在每次调用 detectWithImageData: 之前调用。 */
                 [self.markManager beginDetectionFrame];
                 
                 NSArray *tempArray = [self.markManager detectWithImageData:imageData];
-                
-                
+                //回到主线程来显示，人脸是否离开摄像头，做提示
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (tempArray.count==0) {
                         self.errorMsgLabel.hidden = NO;
                     } else {
                         self.errorMsgLabel.hidden = YES;
                     }
-                    // 还可以嵌套：再回到子线程做其他事情
+                    //回到子线程继续处理视频
                     dispatch_async(_detectImageQueue, ^{
-                        NSDate *date1, *date2, *date3;
-                        date1 = [NSDate date];
-                        date2 = [NSDate date];
-                        double timeUsed = [date2 timeIntervalSinceDate:date1] * 1000;
+                        
                         //这是获取到的人脸数据
                         MGFaceModelArray *faceModelArray = [[MGFaceModelArray alloc] init];
                         faceModelArray.getFaceInfo = NO;
                         faceModelArray.faceArray = [NSMutableArray arrayWithArray:tempArray];
-                        faceModelArray.timeUsed = timeUsed;
                         faceModelArray.get3DInfo = NO;
                         [faceModelArray setDetectRect:CGRectNull];
                         for (int i = 0; i < faceModelArray.count; i ++) {
                             MGFaceInfo *faceInfo = faceModelArray.faceArray[i];
                             [self.markManager GetGetLandmark:faceInfo isSmooth:YES pointsNumber:81];
                         }
-                        date3 = [NSDate date];
-                        double timeUsed3D = [date3 timeIntervalSinceDate:date2] * 1000;
-                        faceModelArray.AttributeTimeUsed = timeUsed3D;
-                        
+                        //绘制人脸信息并显示
                         [self displayWithfaceModel:faceModelArray SampleBuffer:detectSampleBufferRef];
                         [self.markManager endDetectionFrame];
                     });
@@ -452,14 +452,14 @@ typedef NS_ENUM(NSInteger, BtnType) {
     }
 }
 
-/** 根据人脸信息绘制，并且显示 */
+//绘制人脸信息并显示
 - (void)displayWithfaceModel:(MGFaceModelArray *)modelArray SampleBuffer:(CMSampleBufferRef)sampleBuffer{
     @autoreleasepool {
         __unsafe_unretained FaceCapController *weakSelf = self;
         dispatch_async(_drawFaceQueue, ^{
             if (modelArray) {
                 CVPixelBufferRef renderedPixelBuffer = [weakSelf.renderer drawPixelBuffer:sampleBuffer custumDrawing:^{
-                    
+
                     //拷贝出一份单门做显示，因为显示的要比实际采集的多，所以做了单门的处理
                     MGFaceModelArray *showArrayModel = [[MGFaceModelArray alloc] init];
                     showArrayModel.faceArray = [NSMutableArray arrayWithArray:modelArray.faceArray];
@@ -481,8 +481,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
 
-                        SendData* send = [[SendData alloc] init];
-                        [send writeDataWithArray:sendArray];
+                        [self.sendUtil writeDataWithArray:sendArray];
                         //保存到视频组
                         [self.getArray addObject:sendArray];
                     }
@@ -652,6 +651,13 @@ typedef NS_ENUM(NSInteger, BtnType) {
         _fileUtil = [[FileUtil alloc] init];
     }
     return _fileUtil;
+}
+
+- (SendData*)sendUtil {
+    if (!_sendUtil) {
+        _sendUtil = [[SendData alloc] init];
+    }
+    return _sendUtil;
 }
 
 - (UILabel*)showTextLabel {
