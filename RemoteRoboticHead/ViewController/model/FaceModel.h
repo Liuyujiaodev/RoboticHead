@@ -19,4 +19,5 @@
 
 + (MGFaceModelArray*)getShowArray:(MGFaceModelArray*)modelArray;
 
++ (CGFloat)map:(CGFloat)x inMin:(CGFloat)inMin inMax:(CGFloat)inMax outMin:(CGFloat)outMin outMax:(CGFloat)outMax index:(NSInteger)index;
 @end

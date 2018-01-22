@@ -17,9 +17,7 @@ import Foundation
             
             outdatas.append(UInt8(data))
         }
-        for _ in 0...4 {
-            outdatas.append(90)
-        }
+        outdatas.append(90)
         print(outdatas)
         writeToPeripheral(bytes: outdatas)
     }

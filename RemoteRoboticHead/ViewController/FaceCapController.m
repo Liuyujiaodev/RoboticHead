@@ -19,6 +19,15 @@
 #import "FaceModel.h"
 #import "RemoteRoboticHead-Swift.h"
 
+typedef struct {
+    CGFloat minW;
+    CGFloat maxW;
+    CGFloat minH;
+    CGFloat maxH;
+    CGFloat centerX;
+    CGFloat centerY;
+} LimitArea;
+
 #define APPViewWidth               self.view.frame.size.width
 #define APPViewHeight              self.view.frame.size.height
 #define RGBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
@@ -39,6 +48,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 {
     dispatch_queue_t _detectImageQueue;
     dispatch_queue_t _drawFaceQueue;
+    LimitArea limitRect;
 }
 
 @property (nonatomic, strong) MGOpenGLView *previewView;//预览头像的view
@@ -64,6 +74,10 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) UIImageView* faceImgView;//人脸的iamgeView
 @property (nonatomic, strong) UIImageView* getDataImageView;//人脸的iamgeView
 @property (nonatomic, strong) UILabel* errorMsgLabel;//获取不到数据的时候显示
+@property (nonatomic, strong) UIView* bkArea;
+@property (nonatomic, strong) UIView* mvPoint;
+@property (nonatomic, assign) CGFloat pointRelativeX;
+@property (nonatomic, assign) CGFloat pointRelativeY;
 
 @end
 
@@ -80,6 +94,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.pointRelativeX = 90;
+        self.pointRelativeY = 90;
         self.locationArray = [NSMutableArray array];
         self.getArray = [NSMutableArray array];
         self.btnType = BtnTypeNone;//进来后不采集数据
@@ -120,6 +136,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self addTopView];
     [self addImageView];
     [self addBtnView];
+    [self createDragView];
 }
 
 //加载图层预览
@@ -194,6 +211,35 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [backBtn addTarget:self action:@selector(backBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [backBtn setTitle:@"返回" forState:UIControlStateNormal];
     [self.view addSubview:backBtn];
+}
+
+- (void)createDragView {
+    CGFloat height = APPViewHeight - 54 - 60 - 27;//目前背景高度
+    //创建拖拽框
+    self.bkArea = [[UIView alloc] initWithFrame:CGRectMake(APPViewWidth*0.2, (height - APPViewWidth*0.6)/2, APPViewWidth*0.6, APPViewWidth*0.6)];
+    self.bkArea.layer.backgroundColor = [UIColor cyanColor].CGColor;
+    self.bkArea.layer.borderWidth = 1;
+    self.bkArea.layer.borderColor = [UIColor brownColor].CGColor;
+    self.bkArea.alpha = 0.1;
+    [self.view addSubview:self.bkArea];
+    
+    //创建拖拽点
+    self.mvPoint = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMidX(self.bkArea.frame)-20, CGRectGetMidY(self.bkArea.frame)-20, 40, 40)];
+    self.mvPoint.layer.cornerRadius = 20;
+    self.mvPoint.layer.backgroundColor = [UIColor blueColor].CGColor;
+    [self.view addSubview:self.mvPoint];
+
+    //创建点的拖动事件
+    UIPanGestureRecognizer* penDrag = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pointDrag:)];
+    [self.mvPoint addGestureRecognizer:penDrag];
+    
+    //创建最大拖动范围
+    self->limitRect.minW = CGRectGetMinX(self.bkArea.frame);
+    self->limitRect.maxW = CGRectGetMaxX(self.bkArea.frame);
+    self->limitRect.minH = CGRectGetMinY(self.bkArea.frame);
+    self->limitRect.maxH = CGRectGetMaxY(self.bkArea.frame);
+    self->limitRect.centerX = CGRectGetMidX(self.bkArea.frame);
+    self->limitRect.centerY = CGRectGetMidY(self.bkArea.frame);
 }
 
 #pragma mark - btn action
@@ -291,6 +337,61 @@ typedef NS_ENUM(NSInteger, BtnType) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)pointDrag:(UIPanGestureRecognizer*)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        self.showTextLabel.text = @"拖动控制肩膀";
+        self.bkArea.alpha = 0.5;
+        self.mvPoint.layer.backgroundColor = [UIColor redColor].CGColor;
+        self.mvPoint.alpha = 0.7;
+    }
+    
+    //保持拖拽点在边缘
+    CGPoint point = [sender translationInView:self.view];
+    if ((sender.view.center.x + point.x) > limitRect.maxW || sender.view.center.x + point.x < limitRect.minW) {
+        point.x = 0;
+    }
+
+    if((sender.view.center.y + point.y)>(limitRect.maxH) || (sender.view.center.y + point.y)<limitRect.minH){
+        point.y = 0;
+    }
+    
+    sender.view.center = CGPointMake(sender.view.center.x + point.x, sender.view.center.y + point.y);
+    [sender setTranslation:CGPointZero inView:self.view];
+    
+    //计算并输出坐标点
+    [self checkAngleOnPage];
+    self.showTextLabel.text = [NSString stringWithFormat:@"移动坐标点 x:%f | y:%f", sender.view.center.x, sender.view.center.y];
+    
+    if(sender.state == UIGestureRecognizerStateEnded){
+        //拖拽点回弹到起始位置
+        [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            sender.view.center = CGPointMake(self.bkArea.center.x, self.bkArea.center.y);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                //回弹动画结束后恢复默认约束值
+                self.bkArea.alpha = 0.1;
+                self.mvPoint.layer.backgroundColor = [UIColor blueColor].CGColor;
+                self.mvPoint.alpha = 1;
+                self.showTextLabel.text = @"肩膀位置拖拽完成";
+                [self checkAngleOnPage];
+            }
+        }];
+    }
+}
+
+- (void)checkAngleOnPage {
+    
+   self.pointRelativeX = [FaceModel map:self.mvPoint.center.x inMin:CGRectGetMinX(self.bkArea.frame) inMax:CGRectGetMaxX(self.bkArea.frame) outMin:40 outMax:140 index:0];//前后
+    self.pointRelativeY = [FaceModel map:self.mvPoint.center.y inMin:CGRectGetMinY(self.bkArea.frame) inMax:CGRectGetMaxY(self.bkArea.frame) outMin:40 outMax:140 index:0];//上下
+
+    
+//    outdatas.append(UInt8(ServoOneAccount + currentSelectServo[i]))
+//    if(i%2 == 0){
+//        outdatas.append(map(x: (mvPoint1?.center.x)!, in_min: (bkArea1?.frame.minX)!, in_max: (bkArea1?.frame.maxX)!, out_min: CGFloat(servosData[currentSelectServo[i]].minA), out_max: CGFloat(servosData[currentSelectServo[i]].maxA)))
+//    }else{
+//        outdatas.append(map(x: (mvPoint1?.center.y)!, in_min: (bkArea1?.frame.minY)!, in_max: (bkArea1?.frame.maxY)!, out_min: CGFloat(servosData[currentSelectServo[i]].minA), out_max: CGFl
+}
+
 #pragma mark - 视频处理
 //处理视频数据并显示
 - (void)rotateAndDetectSampleBuffer:(CMSampleBufferRef)sampleBuffer{
@@ -374,7 +475,12 @@ typedef NS_ENUM(NSInteger, BtnType) {
                     } else if (self.btnType == BtnTypeGet){
                         //向蓝牙发送数据
 
-                        NSArray* sendArray = [FaceModel getSendData:ownModelArray.faceArray];
+                        NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray] mutableCopy];
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
+
                         SendData* send = [[SendData alloc] init];
                         [send writeDataWithArray:sendArray];
                         //保存到视频组
@@ -555,7 +661,6 @@ typedef NS_ENUM(NSInteger, BtnType) {
         _showTextLabel.textColor = [UIColor whiteColor];
         _showTextLabel.backgroundColor = RGBColor(253, 146, 38);
         _showTextLabel.font = [UIFont systemFontOfSize:14];
-        _showTextLabel.hidden = YES;
         [self.view addSubview:_showTextLabel];
     }
     return _showTextLabel;
