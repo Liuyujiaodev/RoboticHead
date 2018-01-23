@@ -9,7 +9,7 @@
 import Foundation
 
 @objc class SendData : NSObject {
-
+    //发送给蓝牙
     @objc func writeData(array:Array<NSNumber>) {
         var outdatas:[UInt8] = [250]
         

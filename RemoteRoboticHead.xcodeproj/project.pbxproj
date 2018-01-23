@@ -38,6 +38,7 @@
 		09ABCDB52013191B000999D6 /* ShowDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ABCDB42013191B000999D6 /* ShowDataController.swift */; };
 		09B23557200EFDCB005959DD /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B23556200EFDCB005959DD /* Util.m */; };
 		09D6BB932015B923005CF586 /* readme in Resources */ = {isa = PBXBuildFile; fileRef = 09D6BB922015B923005CF586 /* readme */; };
+		09D6BC0D2015F32D005CF586 /* BodyMoveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D6BC0C2015F32D005CF586 /* BodyMoveViewController.swift */; };
 		5F3BD80E200912E100110755 /* FaceCapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80D200912E100110755 /* FaceCapViewController.swift */; };
 		5F3BD810200913E000110755 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD80F200913E000110755 /* ControlViewController.swift */; };
 		5F3BD81920099EF500110755 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F3BD81820099EF500110755 /* test.mm */; };
@@ -116,6 +117,7 @@
 		09B23555200EFDCB005959DD /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		09B23556200EFDCB005959DD /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		09D6BB922015B923005CF586 /* readme */ = {isa = PBXFileReference; lastKnownFileType = text; path = readme; sourceTree = "<group>"; };
+		09D6BC0C2015F32D005CF586 /* BodyMoveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyMoveViewController.swift; sourceTree = "<group>"; };
 		5F3BD80D200912E100110755 /* FaceCapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCapViewController.swift; sourceTree = "<group>"; };
 		5F3BD80F200913E000110755 /* ControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlViewController.swift; sourceTree = "<group>"; };
 		5F3BD812200921D700110755 /* RemoteRoboticHead-Brdging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemoteRoboticHead-Brdging-Header.h"; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 		5F4CF3542007834500ED2066 /* RemoteRoboticHead */ = {
 			isa = PBXGroup;
 			children = (
+				09D6BC0C2015F32D005CF586 /* BodyMoveViewController.swift */,
 				098378FF200F3936001FF8DB /* Resources */,
 				098378F6200F304A001FF8DB /* ViewController */,
 				09609D8F200C4AA00051AE10 /* lib */,
@@ -488,6 +491,7 @@
 				09ABCDAC2011D5D8000999D6 /* WriteToFile.swift in Sources */,
 				5F3BD844200B8B5100110755 /* ActionListViewController.swift in Sources */,
 				5F3BD8402009DBF600110755 /* ServosData.swift in Sources */,
+				09D6BC0D2015F32D005CF586 /* BodyMoveViewController.swift in Sources */,
 				5F4CF3582007834500ED2066 /* BTViewController.swift in Sources */,
 				09ABCDA620118515000999D6 /* SendData.swift in Sources */,
 				5F4CF3562007834500ED2066 /* AppDelegate.swift in Sources */,

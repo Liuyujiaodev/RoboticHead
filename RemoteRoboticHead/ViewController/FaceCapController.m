@@ -397,6 +397,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     }
 }
 
+//给拖动的左右奸数据赋值
 - (void)checkAngleOnPage {
    self.pointRelativeX = [FaceModel map:self.mvPoint.center.x inMin:CGRectGetMinX(self.bkArea.frame) inMax:CGRectGetMaxX(self.bkArea.frame) outMin:40 outMax:140 index:0];//前后
     self.pointRelativeY = [FaceModel map:self.mvPoint.center.y inMin:CGRectGetMinY(self.bkArea.frame) inMax:CGRectGetMaxY(self.bkArea.frame) outMin:40 outMax:140 index:0];//上下
@@ -474,14 +475,13 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         [self.locationArray addObject:ownModelArray];
                     } else if (self.btnType == BtnTypeGet){
                         //向蓝牙发送数据
-
-                        NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray] mutableCopy];
-                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];
-                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];
-                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
-                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];
-
-                        [self.sendUtil writeDataWithArray:sendArray];
+                        NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray] mutableCopy];//face++拿到的数据
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//左肩上下
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//右肩上下
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//左肩前后
+                        [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//右肩前后
+                        [self.sendUtil writeDataWithArray:sendArray];//发送给蓝牙
+                        
                         //保存到视频组
                         [self.getArray addObject:sendArray];
                     }
@@ -494,8 +494,9 @@ typedef NS_ENUM(NSInteger, BtnType) {
                 
                 if (renderedPixelBuffer)
                 {
+                    //显示摄像头数据
                     [weakSelf.previewView displayPixelBuffer:renderedPixelBuffer];
-                    
+                    //释放对象
                     CFRelease(sampleBuffer);
                     CVBufferRelease(renderedPixelBuffer);
                 }
@@ -505,7 +506,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 
-#pragma mark - video delegate 视频回来的处理
+#pragma mark - video delegate 视频回来的处理(系统拿到视频数据回传过来的delegate方法)
 -(void)MGCaptureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     @synchronized(self) {
         //视频开始录制的时候，需要清除以前的buffer
@@ -517,6 +518,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     }
 }
 
+//系统视频回来错误方法
 - (void)MGCaptureOutput:(AVCaptureOutput *)captureOutput error:(NSError *)error{
     UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:@"相机异常"
                                                                                  message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -575,12 +577,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 
 //检测权限失败提示用户
 - (void)showAVAuthorizationStatusDeniedAlert{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请打开相机权限" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    [alertController addAction:action];
-    [self presentViewController:alertController animated:YES completion:nil];
+    [self alertErrorMsg:@"请打开相机权限" msg:@"获取相机权限失败"];
 }
 
 - (void)authFace {
@@ -629,6 +626,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                                              config.pixelFormatType = PixelFormatTypeRGBA;
                                          }];
     
+    //初始化两个线程，第一个用于face++解析采集到的视频数据，第二个用于绘制图像
     _detectImageQueue = dispatch_queue_create("com.megvii.image.detect", DISPATCH_QUEUE_SERIAL);
     _drawFaceQueue = dispatch_queue_create("com.megvii.image.drawFace", DISPATCH_QUEUE_SERIAL);
     
@@ -646,6 +644,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 //以下有可能用不到，所以等用到的时候再去创建对象
+//文件的读取，写入的Uitl对象，初始化fileUtil属性
 -(FileUtil*)fileUtil {
     if (!_fileUtil) {
         _fileUtil = [[FileUtil alloc] init];
@@ -653,6 +652,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     return _fileUtil;
 }
 
+//初始化sendUtil属性，发送给蓝牙的属性
 - (SendData*)sendUtil {
     if (!_sendUtil) {
         _sendUtil = [[SendData alloc] init];
@@ -660,6 +660,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     return _sendUtil;
 }
 
+//下边的状态栏的view
 - (UILabel*)showTextLabel {
     if (!_showTextLabel) {
         _showTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60 - 27, APPViewWidth, 27)];
@@ -672,6 +673,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     return _showTextLabel;
 }
 
+//采集时候左上角的摄像头的view
 - (UIImageView*)getDataImageView {
     if (!_getDataImageView) {
         _getDataImageView = [[UIImageView alloc] initWithFrame:CGRectMake(18, 86, 40, 40)];
@@ -682,6 +684,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     return _getDataImageView;
 }
 
+//顶部采集不到数据的view
 - (UILabel*)errorMsgLabel {
     if (!_errorMsgLabel) {
         _errorMsgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, APPViewWidth, 60)];

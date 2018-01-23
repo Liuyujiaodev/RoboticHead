@@ -320,29 +320,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "538301082.154815"
+            timestampString = "538309330.0611399"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
             landmarkName = "FaceCapController"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "538301082.155419"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "583"
-            endingLineNumber = "583"
-            landmarkName = "-showAVAuthorizationStatusDeniedAlert"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -506,7 +490,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "538301082.15625"
+            timestampString = "538309330.062086"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "302"
@@ -666,7 +650,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "538301082.156939"
+            timestampString = "538309330.062493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "350"
@@ -745,7 +729,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/FaceCapController.m"
-            timestampString = "538301082.157645"
+            timestampString = "538309330.062804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "490"
@@ -782,8 +766,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "110"
             endingLineNumber = "110"
-            landmarkName = "FaceModel"
-            landmarkType = "3">
+            landmarkName = "+printMax:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -793,11 +777,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/ShowDataController.swift"
-            timestampString = "538301082.158138"
+            timestampString = "538361892.730255"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -809,7 +793,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RemoteRoboticHead/ViewController/ShowDataController.swift"
-            timestampString = "538301082.158197"
+            timestampString = "538361892.730831"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "23"
