@@ -85,6 +85,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 //--------处理器-------
 @property (nonatomic, strong) FileUtil* fileUtil;//文件操作的处理器
 @property (nonatomic, strong) SendData* sendUtil;//发送蓝牙数据处理器
+@property (nonatomic, assign) NSInteger count;//限制没五次发送一次
+
 @end
 
 
@@ -277,6 +279,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 }
 
 - (void)getBtnAction:(UIButton*)btn {
+
     //没有可用的定位信息，提示用户先进行定位
     if (!self.standardFaceInfo) {
         [self alertErrorMsg:@"请先进行定位" msg:@"点击定位按钮进行定位"];
@@ -290,7 +293,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
         self.showTextLabel.text = @"正在采集";
         self.btnType = BtnTypeGet;
         [self.getArray removeAllObjects];
-
+        self.count = 0;
+        
         //开启时间倒计时
         [self.timerForGetData invalidate];
         self.time = MAX_GET_TIME;
@@ -474,13 +478,19 @@ typedef NS_ENUM(NSInteger, BtnType) {
                     if (self.btnType == BtnTypeLocation) {
                         [self.locationArray addObject:ownModelArray];
                     } else if (self.btnType == BtnTypeGet){
-                        //向蓝牙发送数据
                         NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray] mutableCopy];//face++拿到的数据
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//左肩上下
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//右肩上下
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//左肩前后
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//右肩前后
-                        [self.sendUtil writeDataWithArray:sendArray];//发送给蓝牙
+                        if (self.count > 5) {
+                            //向蓝牙发送数据
+                            [self.sendUtil writeDataWithArray:sendArray];//发送给蓝牙
+                            self.count = 0;
+                        } else {
+                            self.count++;
+                        }
+                      
                         
                         //保存到视频组
                         [self.getArray addObject:sendArray];
