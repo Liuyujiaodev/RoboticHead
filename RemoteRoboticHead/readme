@@ -5,9 +5,36 @@
     WriteToFile.swift 对本地蓝牙数据的存储
     ShowDataController.swift 数据页面
 二、face++初始化说明
+    1：首先我这边做的是判断相机的权限 getCameraAuth这个方法，无权限-》提示用户开启权限
+                                未获取过权限-》获取用户授权，用户同意-》进行第2步face++初始化
+                                                        用户拒绝-》提示用户开启权限
+                                已获取到相机权限-》进行第2步face++初始化
+    2：face++初始化 对应方法：authFace，这个我在两个方法用到，首先app启动的时候，来获取，防止第一次的时候黑屏， 在FaceCapController里获取，防止启动的时候获取失败，再这再试着获取一次
+              1）、验证是否需要联网授权，如果需要联网授权，则联网授权成功，执行3
+                                    不需要，则不需要进行操作
+    3：初始化face++需要的控件，比如摄像头，数据分析等对应的是： FaceCapController里的initVideo方法，搜索可以找到
+    4：face++的key和secret替换，可搜索MG_LICENSE_KEY、MG_LICENSE_SECRET 来替换
 
 三、动态修改的宏
     1：MAX_GET_TIME 采集的描述，可以直接搜索这个宏修改秒数，现在默认5秒
-    2：
+    2：FaceModel里搜索Face_Array这个是采集的点，按照蓝牙的顺序来写，里边的数字对应的是在face++的doc文档里有个81个点的图片，这个图片里对应位置标注的点
+    3：FaceModel里搜索Show_Array这个是用于显示在屏幕上的点，可以增加或者删除脸上的点，不影响采集
+
+四、文件里可能用到的log
+    1：打印功能：采集时候face++返回数据
+       定位： 全局搜索 //face++返回值的打印  快速定位
+       值修改： CGPoint currentPoint = [faceInfo.points[0] CGPointValue];
+              修改0这个值，这个值的取值是，左侧眉毛 0， 右侧眉毛 1，眼睛左右 2， 眼睛上下 3，和蓝牙数组的index对应
+
+    2：打印功能：map函数之前的值，和之后的值
+       定位：全局搜索  //index == 0 修改0，这个值的取值是，左侧眉毛 0， 右侧眉毛 1，眼睛左右 2， 眼睛上下 3，和蓝牙数组的index对应，或者删掉把log拿到if之外，看所有的值
+       值修改  if (index == 0) {
+                NSLog(@"/******map之前：%lf*******map之后：%d", x, result);
+              }
+
+五、可能你需要多个人来测试修改，最大值和最小值，这个我用log打出来了，只要采集过程中，发现有
+    1： /*****************index:%ld******最小值应改为  这样的log，就应该按第3步修改
+    2： /*****************index:%ld******最大值应改为  这样的log，就应该按第3步修改
+    3：修改方法：FaceModel.m文件里，getSendData这个方法里， sendData这个数组里的数据都调用了map这个函数，找到最后对应的打印出log的index，改对应的inMin的值或inMax的值
 
 

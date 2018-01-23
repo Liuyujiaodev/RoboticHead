@@ -357,6 +357,7 @@
 		5F4CF3542007834500ED2066 /* RemoteRoboticHead */ = {
 			isa = PBXGroup;
 			children = (
+				09D6BB922015B923005CF586 /* readme */,
 				09D6BC0C2015F32D005CF586 /* BodyMoveViewController.swift */,
 				098378FF200F3936001FF8DB /* Resources */,
 				098378F6200F304A001FF8DB /* ViewController */,
@@ -375,7 +376,6 @@
 				5F3BD83D2009DACB00110755 /* CSTableViewCell.swift */,
 				5F3BD83F2009DBF600110755 /* ServosData.swift */,
 				5F3BD843200B8B5100110755 /* ActionListViewController.swift */,
-				09D6BB922015B923005CF586 /* readme */,
 			);
 			path = RemoteRoboticHead;
 			sourceTree = "<group>";
