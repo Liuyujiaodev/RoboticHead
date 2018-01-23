@@ -36,6 +36,7 @@ typedef struct {
 #define RETAINED_BUFFER_COUNT 6
 
 #define MAX_GET_TIME  5 //采集多少秒
+#define BLUETOOTH_SEND  5//蓝牙发送频率
 
 typedef NS_ENUM(NSInteger, BtnType) {
     BtnTypeNone = 0,//不做数据采集工作，只显示摄像头内容
@@ -483,7 +484,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//右肩上下
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//左肩前后
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//右肩前后
-                        if (self.count > 5) {
+                        if (self.count > BLUETOOTH_SEND) {
                             //向蓝牙发送数据
                             [self.sendUtil writeDataWithArray:sendArray];//发送给蓝牙
                             self.count = 0;

@@ -19,6 +19,7 @@
     1：MAX_GET_TIME 采集的描述，可以直接搜索这个宏修改秒数，现在默认5秒
     2：FaceModel里搜索Face_Array这个是采集的点，按照蓝牙的顺序来写，里边的数字对应的是在face++的doc文档里有个81个点的图片，这个图片里对应位置标注的点
     3：FaceModel里搜索Show_Array这个是用于显示在屏幕上的点，可以增加或者删除脸上的点，不影响采集
+    4：FaceCapContoller.m这个文件里的 BLUETOOTH_SEND 这个宏可以改蓝牙发送的频率
 
 四、文件里可能用到的log
     1：打印功能：采集时候face++返回数据
