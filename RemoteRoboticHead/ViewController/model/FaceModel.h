@@ -15,7 +15,7 @@
 
 + (MGFaceInfo*)getCenterPoint:(NSArray*)models;
 
-+ (NSArray*)getSendData:(NSArray*)faceArray;
++ (NSArray*)getSendData:(NSArray*)faceArray withStandardFaceInfo:(MGFaceInfo*)standardFaceInfo;
 
 + (MGFaceModelArray*)getShowArray:(MGFaceModelArray*)modelArray;
 

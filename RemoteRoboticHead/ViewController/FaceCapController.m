@@ -67,6 +67,8 @@ typedef NS_ENUM(NSInteger, BtnType) {
 @property (nonatomic, strong) UIImageView* faceImgView;//人脸框的图片
 @property (nonatomic, strong) UIImageView* getDataImageView;//采集时候左上角的摄像机的小图标
 @property (nonatomic, strong) UILabel* errorMsgLabel;//获取不到数据的时候显示
+@property (nonatomic, strong) UIButton* locationBtn;//定位按钮
+@property (nonatomic, strong) UIButton* getBtn;//采集按钮
 
 //--------数据相关-------
 @property (nonatomic, assign) BtnType btnType;//区分是采集还是定位
@@ -191,22 +193,22 @@ typedef NS_ENUM(NSInteger, BtnType) {
 //创建底部四个按钮
 - (void)addBtnView {
     //定位按钮
-    UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60, APPViewWidth/4, 60)];
-    [locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [locationBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
-    [locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [locationBtn setTitle:@"定位" forState:UIControlStateNormal];
-    [locationBtn setTitle:@"确定" forState:UIControlStateSelected];
-    [self.view addSubview:locationBtn];
+    self.locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60, APPViewWidth/4, 60)];
+    [self.locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
+    [self.locationBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
+    [self.locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.locationBtn setTitle:@"定位" forState:UIControlStateNormal];
+    [self.locationBtn setTitle:@"确定" forState:UIControlStateSelected];
+    [self.view addSubview:self.locationBtn];
     
     //采集按钮
-    UIButton* getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
-    [getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [getBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
-    [getBtn addTarget:self action:@selector(getBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [getBtn setTitle:@"采集" forState:UIControlStateNormal];
-    [getBtn setTitle:@"停止" forState:UIControlStateSelected];
-    [self.view addSubview:getBtn];
+    self.getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
+    [self.getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
+    [self.getBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
+    [self.getBtn addTarget:self action:@selector(getBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.getBtn setTitle:@"采集" forState:UIControlStateNormal];
+    [self.getBtn setTitle:@"停止" forState:UIControlStateSelected];
+    [self.view addSubview:self.getBtn];
     
     //数据按钮
     UIButton* palyBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4*2, APPViewHeight - 60, APPViewWidth/4, 60)];
@@ -261,6 +263,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     btn.selected = !btn.selected;
     if (btn.selected) {
         //按下定位按钮，显示红色框，状态显示开始定位，然后设置btnType,来将数据存到locationArray里，清除上次定位存放的数据
+        self.getBtn.enabled = NO;
         self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
         self.showTextLabel.text = @"开始定位";
         self.btnType = BtnTypeLocation;
@@ -268,6 +271,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     } else {
         //设置btntype为BtnTypeNone，摄像头数据将不存到locationArray，状态显示定位结束，判断采集回来的数据是否可用，如果可用，计算定位里数据的平均值，放到locationArray，否则弹窗提示定位失败
         self.btnType = BtnTypeNone;
+        self.getBtn.enabled = YES;
         self.showTextLabel.text = @"定位结束";
         self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
         if (self.locationArray.count > 0) {
@@ -289,6 +293,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     btn.selected = !btn.selected;
     if (btn.selected) {
         //人脸框变红，显示左上角采集的图标，状态提示正在采集，btnType设为BtnTypeGet，将视频采集到的数据存到getArray，清除以前存放的数据
+        self.locationBtn.enabled = NO;
         self.faceImgView.image = [UIImage imageNamed:@"faceAreaRed"];
         self.getDataImageView.hidden = NO;
         self.showTextLabel.text = @"正在采集";
@@ -326,6 +331,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
 //采集完成的方法
 - (void)finishGetData {
     //人脸框变蓝，状态显示采集完成，隐藏左上角摄像机图标，倒计时结束，并且停止收集数据
+    self.locationBtn.enabled = YES;
     self.faceImgView.image = [UIImage imageNamed:@"faceArea"];
     self.showTextLabel.text = @"采集完成";
     self.getDataImageView.hidden = YES;
@@ -479,7 +485,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
                     if (self.btnType == BtnTypeLocation) {
                         [self.locationArray addObject:ownModelArray];
                     } else if (self.btnType == BtnTypeGet){
-                        NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray] mutableCopy];//face++拿到的数据
+                        NSMutableArray* sendArray = [[FaceModel getSendData:ownModelArray.faceArray withStandardFaceInfo:self.standardFaceInfo] mutableCopy];//face++拿到的数据
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//左肩上下
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeY]];//右肩上下
                         [sendArray addObject:[NSNumber numberWithInt:self.pointRelativeX]];//左肩前后

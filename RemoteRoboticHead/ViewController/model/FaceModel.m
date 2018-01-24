@@ -74,6 +74,7 @@
         [points addObject:[NSValue valueWithCGPoint:[self centerPoint:faceArray]]];
     }
 
+    NSLog(@"-------stat:%f", [points[14] CGPointValue].y);
     //初始化一个faceinfo，用于放计算好平均点的point
     MGFaceInfo* faceInfo = [[MGFaceInfo alloc] init];
     faceInfo.points = points;
@@ -85,16 +86,16 @@
     CGFloat totalX = 0.0, totalY = 0.0;
     for (int i = 0; i < pointArray.count; i ++) {
         CGPoint pointer = [pointArray[i] CGPointValue];
-
         totalX += pointer.x;
         totalY += pointer.y;
     }
     CGPoint point = CGPointMake(totalX/pointArray.count, totalY/pointArray.count);
+    
     return point;
 }
 
 //转换成需要发送的数据
-+ (NSArray*)getSendData:(NSArray*)faceArray {
++ (NSArray*)getSendData:(NSArray*)faceArray withStandardFaceInfo:(MGFaceInfo*)standardFaceInfo {
     NSMutableArray* array = [NSMutableArray array];
     //如果没有数据则发送蓝牙数据90
     if (faceArray.count == 0) {
@@ -124,40 +125,46 @@
     }
     
     NSMutableArray* sendData = [NSMutableArray array];
+    
     //左眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:1 inMax:100 outMin:20 outMax:160 index:0]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:0] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:0] CGPointValue].y - 10) inMax:([[standardFaceInfo.points objectAtIndex:0] CGPointValue].y + 10) outMin:20 outMax:160 index:0]]];
+
     //右眉
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:1 inMax:100 outMin:20 outMax:160 index:1]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:1] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:1] CGPointValue].y - 10) inMax:([[standardFaceInfo.points objectAtIndex:1] CGPointValue].y + 10) outMin:20 outMax:160 index:1]]];
+    
     //    Servos(name: "眼睛左右", currentAngle: array[2] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:80 inMax:200 outMin:10 outMax:170 index:2]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].x inMin:([[standardFaceInfo.points objectAtIndex:3] CGPointValue].x - 10) inMax:([[standardFaceInfo.points objectAtIndex:3] CGPointValue].x + 10) outMin:10 outMax:170 index:2]]];
     //    Servos(name: "眼睛上下", currentAngle: array[3] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:0 inMax:20 outMin:10 outMax:170 index:3]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:3] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:3] CGPointValue].y - 10) inMax:([[standardFaceInfo.points objectAtIndex:3] CGPointValue].y + 10) outMin:10 outMax:170 index:3]]];
+    
     //    Servos(name: "左上眼皮", currentAngle: array[4] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:5] CGPointValue].y inMin:3 inMax:15 outMin:20 outMax:160 index:4]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:5] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:5] CGPointValue].y - 3) inMax:([[standardFaceInfo.points objectAtIndex:5] CGPointValue].y + 3) outMin:20 outMax:160 index:4]]];
+    
     
     //Servos(name: "右上眼皮", currentAngle: array[5] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:10] CGPointValue].y inMin:0 inMax:15 outMin:20 outMax:160 index:5]]];
-    
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:10] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:10] CGPointValue].y - 3) inMax:([[standardFaceInfo.points objectAtIndex:10] CGPointValue].y + 3) outMin:20 outMax:160 index:5]]];
+
     // Servos(name: "左下眼皮", currentAngle: array[6] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:6] CGPointValue].y inMin:0 inMax:28 outMin:20 outMax:160 index:6]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:6] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:6] CGPointValue].y - 1.5) inMax:([[standardFaceInfo.points objectAtIndex:6] CGPointValue].y + 1.5) outMin:20 outMax:160 index:6]]];
     
     //Servos(name: "右下眼皮", currentAngle: array[7] as! UInt8, minA: 20, maxA: 160)
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:11] CGPointValue].y inMin:0 inMax:28 outMin:20 outMax:160 index:7]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:11] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:11] CGPointValue].y - 1.5) inMax:([[standardFaceInfo.points objectAtIndex:11] CGPointValue].y + 1.5) outMin:20 outMax:160 index:7]]];
     
     //Servos(name: "左唇上下", currentAngle: array[8] as! UInt8, minA: 20, maxA: 160)
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].y inMin:3 inMax:230 outMin:20 outMax:160 index:8]]];
-    
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:14] CGPointValue].y - 20) inMax:([[standardFaceInfo.points objectAtIndex:14] CGPointValue].y + 20) outMin:20 outMax:160 index:8]]];
+
     //Servos(name: "右唇上下", currentAngle: array[9] as! UInt8, minA: 20, maxA: 160)
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:3 inMax:290 outMin:20 outMax:160 index:9]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:16] CGPointValue].y - 20) inMax:([[standardFaceInfo.points objectAtIndex:16] CGPointValue].y + 20) outMin:20 outMax:160 index:9]]];
     
     //    Servos(name: "左唇前后", currentAngle: array[10] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:3 inMax:90 outMin:20 outMax:160 index:10]]];
-    
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:14] CGPointValue].x inMin:([[standardFaceInfo.points objectAtIndex:14] CGPointValue].x - 20) inMax:([[standardFaceInfo.points objectAtIndex:14] CGPointValue].x + 20) outMin:20 outMax:160 index:10]]];
+
     //    Servos(name: "右唇前后", currentAngle: array[11] as! UInt8, minA: 20, maxA: 160),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:3 inMax:80 outMin:20 outMax:160 index:11]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:15] CGPointValue].x inMin:([[standardFaceInfo.points objectAtIndex:15] CGPointValue].x - 20) inMax:([[standardFaceInfo.points objectAtIndex:15] CGPointValue].x + 20) outMin:20 outMax:160 index:11]]];
 
     //    Servos(name: "嘴部张合", currentAngle: array[12] as! UInt8, minA: 10, maxA: 170),
-    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].x inMin:0 inMax:30 outMin:20 outMax:160 index:12]]];
+    [sendData addObject:[NSNumber numberWithInt:[self map:[[array objectAtIndex:16] CGPointValue].y inMin:([[standardFaceInfo.points objectAtIndex:16] CGPointValue].y - 90) inMax:([[standardFaceInfo.points objectAtIndex:16] CGPointValue].y + 90) outMin:20 outMax:160 index:12]]];
+    NSLog(@"******sta:%lf",[[standardFaceInfo.points objectAtIndex:16] CGPointValue].y);
 
     
     //Servos(name: "头部旋转", currentAngle: array[13] as! UInt8, minA: 40, maxA: 140)
@@ -199,18 +206,20 @@
 
 //map区间值
 + (CGFloat)map:(CGFloat)x inMin:(CGFloat)inMin inMax:(CGFloat)inMax outMin:(CGFloat)outMin outMax:(CGFloat)outMax index:(NSInteger)index {
-    
+
     if (x < inMin) {
         NSLog(@"/*****************index:%ld******最小值应改为:%lf",(long)index, x);
+        x = inMin;
     }
     if (x > inMax) {
         NSLog(@"/*****************index:%ld******最大值应改为:%lf",(long)index, x);
+        x = inMax;
     }
     int result = (outMax - outMin) / (inMax - inMin) * (x - inMin) + outMin;
     
     //index == 0这个对应的就是蓝牙发送的数组里对应的值，比如 0是左眉 1是右眉 2眼睛左右  3眼睛上下
-    if (index == 0) {
-        NSLog(@"/******map之前：%lf*******map之后：%d", x, result);
+    if (index == 12) {
+        NSLog(@"/******map之前：%lf*******map之后：%d*****minIn：%lf*****inMax:%lf", x, result, inMin, inMax);
     }
     return result;
 }
