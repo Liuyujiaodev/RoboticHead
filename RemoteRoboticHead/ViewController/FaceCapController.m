@@ -195,7 +195,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     //定位按钮
     self.locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, APPViewHeight - 60, APPViewWidth/4, 60)];
     [self.locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [self.locationBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateDisabled];
+    [self.locationBtn setBackgroundColor:[UIColor darkGrayColor] forState:UIControlStateDisabled];
     [self.locationBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
     [self.locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.locationBtn setTitle:@"定位" forState:UIControlStateNormal];
@@ -205,7 +205,7 @@ typedef NS_ENUM(NSInteger, BtnType) {
     //采集按钮
     self.getBtn = [[UIButton alloc] initWithFrame:CGRectMake(APPViewWidth/4, APPViewHeight - 60, APPViewWidth/4, 60)];
     [self.getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateNormal];
-    [self.getBtn setBackgroundColor:RGBColor(67, 171, 212) forState:UIControlStateDisabled];
+    [self.getBtn setBackgroundColor:[UIColor darkGrayColor] forState:UIControlStateDisabled];
     [self.getBtn setBackgroundColor:[UIColor redColor] forState:UIControlStateSelected];
     [self.getBtn addTarget:self action:@selector(getBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.getBtn setTitle:@"采集" forState:UIControlStateNormal];
